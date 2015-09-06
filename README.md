@@ -24,47 +24,47 @@ Drag can be enabled or disabled with `linesDrawingEnabled`.
 
 How to include one into your app:
 ```kotlin
-    parent as JPanel
+parent as JPanel
 
-    val v = Visualizer()
-    parent.add(v)
+val v = Visualizer()
+parent.add(v)
 ```
 That's it!
 
 Or even simpler, there's `Demo` app stub which you can use:
 ```kotlin
-    val demo = Demo()
-    val v = demo.visualizer()
-    demo.start()
+val demo = Demo()
+val v = demo.visualizer()
+demo.start()
 ```
 See the demos attached for more examples.
 
 How to use:
 ```kotlin
-    v as Visualizer
+v as Visualizer
 
-    v add PointDrawable(0.5, 0.5)
-    v add PointDrawable(0.1, 0.3, Color.GREEN)
-    v add SegmentDrawable(0.1, 0.3, 0.5, 0.5)
+v add PointDrawable(0.5, 0.5)
+v add PointDrawable(0.1, 0.3, Color.GREEN)
+v add SegmentDrawable(0.1, 0.3, 0.5, 0.5)
 
-    v.area = Area(0.1, 0.1, 0.9, 0.9)
+v.area = Area(0.1, 0.1, 0.9, 0.9)
 
-    v add (0..100).map { SegmentDrawable(0.0, it * 0.01, 1.0, it * 0.01 }
-    v remove { it is PointDrawable }
+v add (0..100).map { SegmentDrawable(0.0, it * 0.01, 1.0, it * 0.01 }
+v remove { it is PointDrawable }
 
-    v.linesDrawingEnabled = true //it's true by default though
+v.linesDrawingEnabled = true //it's true by default though
 
-    v onClick { x, y ->
-        println("Clicked at $x, $y.")
-        v add PointDrawable(x, y, someRandomColor())
+v onClick { x, y ->
+    println("Clicked at $x, $y.")
+    v add PointDrawable(x, y, someRandomColor())
+}
+
+v onDrag { x0, y0, x1, y1 ->
+    val p0 = Point(x0, y0)
+    val p1 = Point(x1, y1)
+    if (distance(p0, p1) >= 0.3) {
+        println("Dragged so long! From $x0, $y0 to $x1, $y1.")
+        v add SegmentDrawable(p0, p1)
     }
-
-    v onDrag { x0, y0, x1, y1 ->
-        val p0 = Point(x0, y0)
-        val p1 = Point(x1, y1)
-        if (distance(p0, p1) >= 0.3) {
-            println("Dragged so long! From $x0, $y0 to $x1, $y1.")
-            v add SegmentDrawable(p0, p1)
-        }
-    }
+}
 ```
