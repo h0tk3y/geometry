@@ -1,7 +1,7 @@
 package visualizer
 
 import utils.Point
-import utils.Rect
+import utils.Area
 import utils.Segment
 import utils.withEach
 import java.awt.*
@@ -37,16 +37,16 @@ public class Visualizer : JPanel() {
     public val drawables: MutableList<Drawable> = arrayListOf()
     public val tempDrawables: MutableList<Drawable> = arrayListOf()
 
-    public var area: Rect = Rect(Point(0.0, 0.0), Point(1.0, 1.0))
-        private set(n: Rect) {
+    public var area: Area = Area(Point(0.0, 0.0), Point(1.0, 1.0))
+        private set(n: Area) {
             $area = n
-            currentCoordinates = coordinatesByRect(n)
+            currentCoordinates = coordinatesOfArea(n)
             repaint()
         }
 
-    private var currentCoordinates: Coordinates = coordinatesByRect(area)
+    private var currentCoordinates: Coordinates = coordinatesOfArea(area)
 
-    private fun coordinatesByRect(r: Rect): Coordinates = Coordinates.by {
+    private fun coordinatesOfArea(r: Area): Coordinates = Coordinates.by {
         Pair(Math.round((it.x - r.lowerLeft.x) * width / r.width).toInt(),
              Math.round((1 - (it.y - r.lowerLeft.y) / r.height) * height).toInt())
     }
@@ -77,7 +77,7 @@ public class Visualizer : JPanel() {
 
     init {
         var rmbPressPoint: Point?
-        var originalArea: Rect
+        var originalArea: Area
 
         var lmbPressPoint: Point?
 
@@ -140,7 +140,7 @@ public class Visualizer : JPanel() {
                 if (rmbPressPoint != null) {
                     val deltaX = p.x - rmbPressPoint!!.x - (area.lowerLeft.x - originalArea.lowerLeft.x)
                     val deltaY = p.y - rmbPressPoint!!.y - (area.lowerLeft.y - originalArea.lowerLeft.y)
-                    area = Rect(Point(originalArea.lowerLeft.x - deltaX, originalArea.lowerLeft.y - deltaY),
+                    area = Area(Point(originalArea.lowerLeft.x - deltaX, originalArea.lowerLeft.y - deltaY),
                                 Point(originalArea.upperRight.x - deltaX, originalArea.upperRight.y - deltaY))
                 }
             }

@@ -32,7 +32,10 @@ public open class Segment(val from: Point, val to: Point) {
     val y1: Double = to.y
 }
 
-public open class Rect(p1: Point, p2: Point) {
+public open class Area(p1: Point, p2: Point) {
+
+    constructor(x0: Double, y0: Double, x1: Double, y1: Double): this(Point(x0, y0), Point(x1, y1))
+
     val lowerLeft = Point(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y))
     val upperRight = Point(Math.max(p1.x, p2.x), Math.max(p1.y, p2.y))
 
@@ -41,13 +44,13 @@ public open class Rect(p1: Point, p2: Point) {
 
     fun center() = Point(lowerLeft.x + 0.5 * width, lowerLeft.y + 0.5 * height)
 
-    fun scaleCentered(ratio: Double, center: Point = center()): Rect {
+    fun scaleCentered(ratio: Double, center: Point = center()): Area {
         val centerToLeft = center.x - lowerLeft.x
         val centerToRight = upperRight.x - center.x
         val centerToBottom = center.y - lowerLeft.y
         val centerToTop = upperRight.y - center.y
 
-        return Rect(Point(center.x - centerToLeft * ratio, center.y - centerToBottom * ratio),
+        return Area(Point(center.x - centerToLeft * ratio, center.y - centerToBottom * ratio),
                     Point(center.x + centerToRight * ratio, center.y + centerToTop * ratio))
     }
 }
