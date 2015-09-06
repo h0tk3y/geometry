@@ -14,27 +14,33 @@ Algorithms implemented at the moment:
 * Polygon triangulation
   * Ear clipping algorithm
 
+Geometry primitives like _left turn_ predicate, distance and segment intersection are also there.
+
 Visualizer
 ---
 Zoom, moving, left click, right-click and drag callbacks are implemented.
+Moving is done with right mouse button drag, zooming -- with mouse scroll.
+Drag can be enabled or disabled with `linesDrawingEnabled`.
 
 How to include one into your app:
-
+```kotlin
     parent as JPanel
 
     val v = Visualizer()
     parent.add(v)
-
+```
 That's it!
 
 Or even simpler, there's `Demo` app stub which you can use:
-
+```kotlin
     val demo = Demo()
     val v = demo.visualizer()
     demo.start()
+```
+See the demos attached for more examples.
 
 How to use:
-
+```kotlin
     v as Visualizer
 
     v add PointDrawable(0.5, 0.5)
@@ -45,6 +51,8 @@ How to use:
 
     v add (0..100).map { SegmentDrawable(0.0, it * 0.01, 1.0, it * 0.01 }
     v remove { it is PointDrawable }
+
+    v.linesDrawingEnabled = true //it's true by default though
 
     v onClick { x, y ->
         println("Clicked at $x, $y.")
@@ -59,3 +67,4 @@ How to use:
             v add SegmentDrawable(p0, p1)
         }
     }
+```
