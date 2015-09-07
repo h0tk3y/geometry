@@ -20,7 +20,6 @@ Visualizer
 ---
 Zoom, moving, left click, right-click and drag callbacks are implemented.
 Moving is done with right mouse button drag, zooming -- with mouse scroll.
-Drag can be enabled or disabled with `linesDrawingEnabled`.
 
 How to include one into your app:
 ```kotlin
@@ -51,8 +50,6 @@ v.area = Area(0.1, 0.1, 0.9, 0.9)
 
 v add (0..100).map { SegmentDrawable(0.0, it * 0.01, 1.0, it * 0.01 }
 v remove { it is PointDrawable }
-
-v.linesDrawingEnabled = true //it's true by default though
 
 v onClick { x, y ->
     println("Clicked at $x, $y.")

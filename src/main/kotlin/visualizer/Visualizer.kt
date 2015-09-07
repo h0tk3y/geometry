@@ -32,10 +32,8 @@ public interface Coordinates {
 public class Visualizer : JPanel() {
     val backgroundColor = Color(30, 30, 30)
 
-    public var linesDrawingEnabled: Boolean = true
-
     public val drawables: MutableList<Drawable> = arrayListOf()
-    public val tempDrawables: MutableList<Drawable> = arrayListOf()
+    private val tempDrawables: MutableList<Drawable> = arrayListOf()
 
     public var area: Area = Area(Point(0.0, 0.0), Point(1.0, 1.0))
         private set(n: Area) {
@@ -86,7 +84,10 @@ public class Visualizer : JPanel() {
             override fun mousePressed(e: MouseEvent) {
                 val p = pointByScreenPoint(e.getX(), e.getY())
                 when (e.getButton()) {
-                    MouseEvent.BUTTON1 -> if (linesDrawingEnabled) lmbPressPoint = p
+                    MouseEvent.BUTTON1 -> {
+                        if (onDragListener != null)
+                            lmbPressPoint = p
+                    }
                     MouseEvent.BUTTON3 -> {
                         rmbPressPoint = p
                         originalArea = area
@@ -107,16 +108,20 @@ public class Visualizer : JPanel() {
                     tempDrawables.clear()
                     repaint()
                 }
-                if (lmbPressPoint != null) {
-                    val p = pointByScreenPoint(e.getX(), e.getY())
-                    onDragListener?.let {
-                        if (lmbPressPoint!!.x != p.x || lmbPressPoint!!.y != p.y)
-                            it(lmbPressPoint!!.x, lmbPressPoint!!.y, p.x, p.y)
+                val p = pointByScreenPoint(e.getX(), e.getY())
+                when (e.getButton()) {
+                    MouseEvent.BUTTON1 -> if (lmbPressPoint != null) {
+                        if (lmbPressPoint!!.x != p.x || lmbPressPoint!!.y != p.y) when {
+                            onDragListener != null ->
+                                onDragListener!!(lmbPressPoint!!.x, lmbPressPoint!!.y, p.x, p.y)
+                            onClickListener != null ->
+                                onClickListener!!(p.x, p.y)
+                        }
+                        lmbPressPoint = null
                     }
-                    lmbPressPoint = null
-                }
-                if (rmbPressPoint != null) {
-                    rmbPressPoint = null
+                    MouseEvent.BUTTON3 -> if (rmbPressPoint != null) {
+                        rmbPressPoint = null
+                    }
                 }
             }
 
@@ -149,9 +154,10 @@ public class Visualizer : JPanel() {
             }
         })
 
-        this.addMouseWheelListener {
-            area = area.scaleCentered(1 + it.getPreciseWheelRotation() * 0.03, pointByScreenPoint(it.getX(), it.getY()))
-        }
+        this.
+                addMouseWheelListener {
+                    area = area.scaleCentered(1 + it.getPreciseWheelRotation() * 0.03, pointByScreenPoint(it.getX(), it.getY()))
+                }
     }
 
     //endregion listeners
@@ -168,9 +174,7 @@ public class Visualizer : JPanel() {
             try {
                 setColor(backgroundColor)
                 fillRect(0, 0, width, height)
-                synchronized(drawables) {
-                    (drawables + tempDrawables).withEach { draw(this@with, currentCoordinates) }
-                }
+                (drawables + tempDrawables).withEach { draw(this@with, currentCoordinates) }
             } finally {
                 dispose()
             }

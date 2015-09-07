@@ -38,8 +38,6 @@ object ConvexHullDemo {
             }
         }
 
-        v.linesDrawingEnabled = false
-
         v.onClick { x, y ->
             v.add(PointDrawable(x, y))
             apply()

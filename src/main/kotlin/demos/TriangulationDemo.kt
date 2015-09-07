@@ -23,7 +23,6 @@ object TriangulationDemo {
     public platformStatic fun main(args: Array<String>) {
         demo.start()
 
-        v.linesDrawingEnabled = false
         val currentPoints = ArrayList<Point>()
 
         v.onClick { x, y ->
