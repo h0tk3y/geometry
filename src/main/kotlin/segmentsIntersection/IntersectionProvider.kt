@@ -11,6 +11,6 @@ public interface IntersectionProvider {
     fun intersection(segments: List<Segment>): List<Point>
 
     public companion object {
-        public val DEFAULT: IntersectionProvider = NaiveIntersection
+        public val DEFAULT: IntersectionProvider = BentleyOttmanIntersection
     }
 }

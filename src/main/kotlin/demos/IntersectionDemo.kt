@@ -1,5 +1,6 @@
 package demos
 
+import segmentsIntersection.IntersectionProvider
 import utils.*
 import visualizer.*
 import kotlin.platform.platformStatic
@@ -16,16 +17,16 @@ object IntersectionDemo {
     public platformStatic fun main(args: Array<String>) {
         demo.start()
 
-        v.onDrag { x0, y0, x1, y1 ->
-            val segment = Segment(x0, y0, x1, y1)
-            val result = arrayListOf<Drawable>()
-            result add SegmentDrawable(segment)
-            for (s in v.drawables.filterIsInstance<Segment>()) {
-                val p = intersectionPoint(segment, s)
-                if (p != null)
-                    result add visualizer.PointDrawable(p)
-            }
-            v add result
+        v onDrag { x0, y0, x1, y1 ->
+            val segment = SegmentDrawable(Point(x0, y0), Point(x1, y1))
+            v add segment
+            val intersection = IntersectionProvider.DEFAULT.intersection(v.drawables.filterIsInstance<Segment>())
+            v remove { it is Point }
+            v add intersection.map { PointDrawable(it) }
+        }
+
+        v onRightClick { x, y ->
+            v.clear()
         }
     }
 }

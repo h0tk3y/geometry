@@ -17,6 +17,8 @@ fun <T : Any> Iterable<T>.maxBy(comparator: Comparator<in T>): T? {
     return max
 }
 
+fun <T : Any> Iterable<T>.minBy(comparator: Comparator<in T>): T? = maxBy(comparator.reversed())
+
 fun Double.between(a: Double, b: Double) = this in Math.min(a, b)..Math.max(a, b)
 
 fun <T> T.oneOf(vararg t: T): Boolean {
@@ -28,3 +30,10 @@ inline fun <T> timed(f: () -> T): Pair<T, Long> {
     val result = f()
     return Pair(result, System.currentTimeMillis() - time)
 }
+
+fun <T> Comparator<in T>.min(t1: T, t2: T) = when (compare(t1, t2)) {
+    1 -> t2
+    else -> t1
+}
+
+fun <T> Comparator<in T>.max(t1: T, t2: T) = reversed().min(t1, t2)
