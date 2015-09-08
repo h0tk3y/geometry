@@ -30,6 +30,8 @@ public open class Segment(val from: Point, val to: Point) {
 
     val x1: Double = to.x
     val y1: Double = to.y
+
+    override fun toString() = "($x0, $y0) -> ($x1, $y1)"
 }
 
 public open class Area(p1: Point, p2: Point) {

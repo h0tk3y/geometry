@@ -32,6 +32,7 @@ public class SegmentDrawable(from: Point, to: Point,
 : Segment(from, to), Drawable {
 
     constructor(s: Segment) : this(s.from, s.to)
+    constructor(x0: Double, y0: Double, x1: Double, y1: Double): this(Point(x0, y0), Point(x1, y1))
 
     override fun draw(graphics: Graphics, coords: Coordinates) {
         val (x0i, y0i) = coords.getDrawingCoordinates(from)
