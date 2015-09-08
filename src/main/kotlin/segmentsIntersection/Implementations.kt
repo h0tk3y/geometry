@@ -25,6 +25,11 @@ object BentleyOttmanIntersection : IntersectionProvider {
         val start: HashSet<Segment> = HashSet()
         val end: HashSet<Segment> = HashSet()
         val intersect: HashSet<Segment> = HashSet()
+
+        override fun toString(): String =
+                (if (start.size() > 0) "+${start.size()} " else "") +
+                (if (end.size() > 0) "-${end.size()} " else "") +
+                (if (intersect.size() > 0) "x${intersect.size()} " else "")
     }
 
     override fun intersection(segments: List<Segment>): List<Point> {
@@ -40,45 +45,38 @@ object BentleyOttmanIntersection : IntersectionProvider {
             events.getOrPut(end) { Event() }.end add s
         }
 
-        var sweepY = events.firstKey()!!.y - 1
-        var prevY = sweepY
-        var sweepX = events.firstKey()!!.x
-        val plusInf = events.lastKey()!!.y + 1
+        var sweepY = events.firstKey().y
+        var sweepX = events.firstKey().x
 
         /** Not a good [Comparator] since its order changes. But with careful use it'll be OK. */
         val sweepLineComparator = compareBy<Segment> {
+            val dx = it.to.x - it.from.x
             val dy = it.to.y - it.from.y
             if (dy == 0.0) sweepX else
-                it.from.x + (it.to.x - it.from.x) * (sweepY - it.from.y) / dy
-        } thenBy { lexComparator.max(it.from, it.to).x }
+                it.from.x + dx * (sweepY - it.from.y) / dy
+        }
 
         val status = TreeSet<Segment>(sweepLineComparator)
         val result = ArrayList<Point>()
-
 
         while (events.isNotEmpty()) {
             val (p, e) = events.firstEntry()
             events.remove(p)
 
+            sweepX = p.x
+
             fun checkIntersection(s1: Segment?, s2: Segment?): Point? {
                 if (s1 != null && s2 != null) {
-                    val m1: Segment
-                    val m2: Segment
-                    if (lexComparator.compare(s1.from, s2.from) == 1) {
-                        m1 = s1
-                        m2 = s2
-                    } else {
-                        m1 = s2
-                        m2 = s1
-                    }
+                    val s1Less = lexComparator.compare(s1.from, s2.from) == -1
+                    val m1 = if (s1Less) s1 else s2
+                    val m2 = if (s1Less) s2 else s1
                     val i = intersectionPoint(m1, m2)
                     if (i != null && lexComparator.compare(i, p) > 0) {
-                        sweepY = Math.min(sweepY, i.y)
                         val event = events.getOrPut(i) { Event() }
                         event.intersect add s1
                         event.intersect add s2
+                        return i
                     }
-                    return i
                 }
                 return null
             }
@@ -96,22 +94,27 @@ object BentleyOttmanIntersection : IntersectionProvider {
 
             events.keySet().firstOrNull()
             sweepY = p.y
-            sweepX = p.x * (1 + 1e-15)
+            sweepX = p.x
 
             val nextEvent = events.keySet().firstOrNull()
-            var nextY = nextEvent?.y ?: plusInf
+            var nextPoint = nextEvent ?: Point(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
 
             val toAdd = (e.intersect.filterNot { it in e.end } + e.start).sortBy(sweepLineComparator)
             for (t in toAdd) {
                 status add t
                 val left = status.headSet(t).lastOrNull { it !in toAdd }
                 val right = status.tailSet(t).firstOrNull { it !in toAdd }
-                checkIntersection(t, left)?.let { nextY = nextY coerceAtMost it.y }
-                checkIntersection(t, right)?.let { nextY = nextY coerceAtMost it.y }
+                checkIntersection(t, left)?.let {
+                    nextPoint = lexComparator.min(nextPoint, it)
+                }
+                checkIntersection(t, right)?.let {
+                    nextPoint = lexComparator.min(nextPoint, it)
+                }
                 status remove t
             }
 
-            sweepY = (p.y + nextY) / 2
+            sweepY = (p.y + nextPoint.y) / 2
+            sweepX = (p.x + nextPoint.x) / 2
             status addAll toAdd
         }
 

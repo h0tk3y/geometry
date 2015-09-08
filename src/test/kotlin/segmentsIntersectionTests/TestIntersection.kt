@@ -12,6 +12,7 @@ import visualizer.PointDrawable
 import visualizer.SegmentDrawable
 import java.awt.Color
 import java.util.*
+import java.util.concurrent.CountDownLatch
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
@@ -38,7 +39,10 @@ private fun testImplementations(segments: List<Segment>) {
             println(s)
         }
 
-        Thread.sleep(1000000000)
+
+        val latch = CountDownLatch(1)
+        v onRightClick { x, y -> latch.countDown()}
+        latch.await()
     }
 }
 
@@ -61,6 +65,19 @@ public class TestIntersection {
             val s2 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
             val s3 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
             testImplementations(listOf(s1, s2, s3))
+        }
+    }
+
+    @Test
+    fun randomizedHorizontalTest() {
+        val random = Random(3)
+        for (i in 1..100000) {
+            val hy = random.nextDouble()
+            val h = Segment(random.nextDouble(), hy, random.nextDouble(), hy)
+            val s1 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
+            val s2 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
+            val s3 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
+            testImplementations(listOf(h, s1, s2, s3))
         }
     }
 }
