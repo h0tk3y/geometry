@@ -1,5 +1,6 @@
 Geometry
 ===
+![Polygon triangulation](https://dl.dropboxusercontent.com/s/rkyjjkfdit00rd9/Capture_K_tr.JPG)
 
 Playing around with Kotlin and computational geometry algorithms.
 
