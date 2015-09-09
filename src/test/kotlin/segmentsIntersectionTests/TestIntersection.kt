@@ -4,6 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import segmentsIntersection.BentleyOttmanIntersection
 import segmentsIntersection.NaiveIntersection
+import testUtils.visualize
 import utils.Point
 import utils.Segment
 import utils.timed
@@ -27,40 +28,19 @@ private fun testImplementations(segments: List<Segment>) {
         println("$i: $time ms, ${s.size()} points")
         return@map s.toSet().size()
     }.distinct().size() != 1) {
-        val d = Demo()
-        val v = d.visualizer
-        d.start()
-
-        v add segments.map { SegmentDrawable(it) }
-        v add BentleyOttmanIntersection.intersection(segments).map { PointDrawable(it) }
-        v add NaiveIntersection.intersection(segments).map { PointDrawable(it.x + 0.004, it.y + 0.004, Color.green) }
-
-        for (s in segments) {
-            println(s)
-        }
-
-
-        val latch = CountDownLatch(1)
-        v onRightClick { x, y -> latch.countDown()}
-        latch.await()
+        visualize(segments)
+        Assert.fail()
     }
 }
 
 public class TestIntersection {
-    @Test
-    fun testRandom2Segments() {
-        val random = Random(0)
-        for (i in 1..1000) {
-            val s1 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
-            val s2 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
-            testImplementations(listOf(s1, s2))
-        }
-    }
 
     @Test
-    fun testRandom3Segments() {
-        val random = Random(4)
-        for (i in 1..100000) {
+    fun test3Segments() {
+        val iterations = 100000
+        val random = Random()
+
+        repeat(iterations) {
             val s1 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
             val s2 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
             val s3 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
@@ -69,15 +49,58 @@ public class TestIntersection {
     }
 
     @Test
-    fun randomizedHorizontalTest() {
-        val random = Random(3)
-        for (i in 1..100000) {
-            val hy = random.nextDouble()
-            val h = Segment(random.nextDouble(), hy, random.nextDouble(), hy)
+    fun testHorizontal() {
+        val iterations = 100000
+        val random = Random()
+
+        repeat(iterations) {
+            val hrY = random.nextDouble()
+            val hr = Segment(random.nextDouble(), hrY, random.nextDouble(), hrY)
             val s1 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
             val s2 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
             val s3 = Segment(random.nextDouble(), random.nextDouble(), random.nextDouble(), random.nextDouble())
-            testImplementations(listOf(h, s1, s2, s3))
+            testImplementations(listOf(hr, s1, s2, s3))
         }
+    }
+
+    @Test
+    fun testBigHorizontal() {
+        val testSize = 100
+        val random = Random()
+
+        val segments = 1..testSize map {
+            Segment(random.nextDouble(), random.nextDouble(),
+                    random.nextDouble(), random.nextDouble())
+        }
+        val hrs = 1..testSize map {
+            val y = random.nextDouble()
+            Segment(random.nextDouble(), y, random.nextDouble(), y)
+        }
+        testImplementations(segments + hrs)
+    }
+
+    @Test
+    fun testBig() {
+        val testSize = 1000
+        val random = Random()
+
+        val segments = 1..testSize map {
+            Segment(random.nextDouble(), random.nextDouble(),
+                    random.nextDouble(), random.nextDouble())
+        }
+        testImplementations(segments)
+    }
+
+    @Test
+    fun testSparse() {
+        val testSize = 10000
+        val random = Random()
+
+        val segments = 1..testSize map {
+            val x = random.nextDouble()
+            val y = random.nextDouble()
+            Segment(x, y, x + random.nextDouble() * 0.05, y + random.nextDouble() * 0.05)
+        }
+        testImplementations(segments)
     }
 }

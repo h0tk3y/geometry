@@ -4,7 +4,7 @@ Geometry
 
 Playing around with Kotlin and computational geometry algorithms.
 
-Algorithms implemented at the moment:
+Algorithms implemented at the moment
 ---
 * Convex hull
   * Jarvis algorithm
@@ -15,7 +15,10 @@ Algorithms implemented at the moment:
 * Polygon triangulation
   * Ear clipping algorithm
 
-Geometry primitives like _left turn_ predicate, distance and segment intersection are also there.
+* Segments intersection
+  * Bentley-Ottman algorithm
+
+Geometry primitives like _left turn_ predicate and distance are also there.
 
 Visualizer
 ---
