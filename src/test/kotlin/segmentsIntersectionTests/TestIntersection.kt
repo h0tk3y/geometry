@@ -2,7 +2,7 @@ package segmentsIntersectionTests
 
 import org.junit.Assert
 import org.junit.Test
-import segmentsIntersection.BentleyOttmanIntersection
+import segmentsIntersection.BentleyOttmannIntersection
 import segmentsIntersection.NaiveIntersection
 import testUtils.visualize
 import utils.Point
@@ -17,10 +17,7 @@ import java.util.concurrent.CountDownLatch
 import kotlin.test.assertTrue
 import kotlin.test.fail
 
-/**
- * Created by igushs on 9/8/2015.
- */
-val implementations = listOf(NaiveIntersection, BentleyOttmanIntersection)
+val implementations = listOf(NaiveIntersection, BentleyOttmannIntersection)
 
 private fun testImplementations(segments: List<Segment>) {
     if (implementations.map { i ->

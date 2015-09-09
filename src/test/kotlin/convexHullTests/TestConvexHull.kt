@@ -1,7 +1,3 @@
-/**
- * Created by igushs on 9/4/2015.
- */
-
 package convexHullTests
 
 import convexHull.*

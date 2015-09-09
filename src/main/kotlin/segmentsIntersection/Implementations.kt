@@ -4,6 +4,7 @@ import utils.*
 import java.util.*
 
 /**
+ * Implementations of line intersection,
  * Created by igushs on 9/6/2015.
  */
 
@@ -17,7 +18,7 @@ object NaiveIntersection : IntersectionProvider {
     }
 }
 
-object BentleyOttmanIntersection : IntersectionProvider {
+object BentleyOttmannIntersection : IntersectionProvider {
 
     val lexComparator = compareBy<Point> { it.y } thenBy { it.x }
 
@@ -54,7 +55,7 @@ object BentleyOttmanIntersection : IntersectionProvider {
 
         /**
          * Orders segments along the sweep line. Horizontal segments
-         * have value of [sweepX]. We'll change sweepY carefully, so
+         * have value of sweepX. We'll change sweepY carefully, so
          * nothing will be broken.
          */
         val sweepLineComparator = compareBy<Segment> {
@@ -95,7 +96,7 @@ object BentleyOttmanIntersection : IntersectionProvider {
                 return null
             }
 
-            /** [p] belongs to more than one segment. */
+            /** Point p belongs to more than one segment. */
             if (e.intersect.isNotEmpty() || e.start.size() + e.end.size() > 1)
                 result add p
 
@@ -112,7 +113,7 @@ object BentleyOttmanIntersection : IntersectionProvider {
 
             val nextEvent = events.keySet().firstOrNull()
 
-            /** Next sweep line position. Will be used below to insert [toAdd] into [status] in the correct order. */
+            /** Next sweep line position. Will be used below to insert toAdd into status in the correct order. */
             var nextPoint = nextEvent ?: Point(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
 
             val toAdd = (e.intersect.filterNot { it in e.end } + e.start)

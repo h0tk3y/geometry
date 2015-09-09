@@ -16,7 +16,7 @@ Algorithms implemented at the moment
   * Ear clipping algorithm
 
 * Segments intersection
-  * Bentley-Ottman algorithm
+  * Bentley-Ottmann algorithm
 
 Geometry primitives like _left turn_ predicate and distance are also there.
 
