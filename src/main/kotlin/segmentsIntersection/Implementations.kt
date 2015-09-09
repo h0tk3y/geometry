@@ -118,16 +118,12 @@ object BentleyOttmannIntersection : IntersectionProvider {
 
             val toAdd = (e.intersect.filterNot { it in e.end } + e.start)
             for (t in toAdd) {
-                status add t
-                val left = status.headSet(t).lastOrNull { it !in toAdd }
-                checkIntersection(t, left)?.let {
-                    nextPoint = lexComparator.min(nextPoint, it)
-                }
-                val right = status.tailSet(t).firstOrNull { it !in toAdd }
-                checkIntersection(t, right)?.let {
-                    nextPoint = lexComparator.min(nextPoint, it)
-                }
-                status remove t
+                status.floor(t)
+                        ?.let { checkIntersection(t, it) }
+                        ?.let { nextPoint = lexComparator.min(nextPoint, it) }
+                status.ceiling(t)
+                        ?.let { checkIntersection(t, it) }
+                        ?.let { nextPoint = lexComparator.min(nextPoint, it) }
             }
 
             sweepY = (p.y + nextPoint.y) / 2

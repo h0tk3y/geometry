@@ -11,6 +11,8 @@ import kotlin.concurrent.timer
 import kotlin.platform.platformStatic
 
 /**
+ * Demonstrates convex hull on a set of points with pseudo Brownian motion.
+ *
  * Created by igushs on 8/31/2015.
  */
 
