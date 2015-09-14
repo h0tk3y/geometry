@@ -1,9 +1,12 @@
 package utils
 
 import java.util.*
+import kotlin.properties.Delegates
 import kotlin.util.measureTimeMillis
 
 /**
+ * Utils used in the project code.
+ *
  * Created by igushs on 8/30/2015.
  */
 
@@ -21,10 +24,6 @@ fun <T : Any> Iterable<T>.minBy(comparator: Comparator<in T>): T? = maxBy(compar
 
 fun Double.between(a: Double, b: Double) = this in Math.min(a, b)..Math.max(a, b)
 
-fun <T> T.oneOf(vararg t: T): Boolean {
-    return this in t
-}
-
 inline fun <T> timed(f: () -> T): Pair<T, Long> {
     val time = System.currentTimeMillis()
     val result = f()
@@ -37,3 +36,10 @@ fun <T> Comparator<in T>.min(t1: T, t2: T) = when (compare(t1, t2)) {
 }
 
 fun <T> Comparator<in T>.max(t1: T, t2: T) = reversed().min(t1, t2)
+
+fun <T> lateInit() = Delegates.notNull<T>()
+
+fun <T> T.after(action: (T) -> Unit): T {
+    action(this)
+    return this
+}

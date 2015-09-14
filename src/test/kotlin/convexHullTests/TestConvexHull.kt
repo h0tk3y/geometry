@@ -2,6 +2,7 @@ package convexHullTests
 
 import convexHull.*
 import org.junit.*
+import testUtils.circle
 import testUtils.visualize
 import utils.*
 import java.util.*
@@ -32,10 +33,6 @@ public class TestConvexHull {
         val points = (0..2000000).map { Point(random.nextDouble(), random.nextDouble()) }
         testImplementations(points)
     }
-
-    private fun circle(r: Double, n: Int): List<Point> =
-            (0.0..Math.PI * 2 * (1 - 1 / n) step Math.PI * 2 / n)
-                    .map { Point(r * Math.cos(it), r * Math.sin(it)) }
 
     @Test fun testCircle() {
         val points = circle(1.0, 10000)

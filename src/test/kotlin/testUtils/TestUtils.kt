@@ -12,6 +12,8 @@ import java.util.concurrent.CountDownLatch
 import javax.swing.WindowConstants
 
 /**
+ * Utils used in tests.
+ *
  * Created by igushs on 9/9/2015.
  */
 
@@ -69,4 +71,10 @@ fun visualize(items: List<*>) {
     })
 
     latchFinished.await()
+}
+
+fun circle(r: Double, n: Int): List<Point> {
+    val p = (0.0..2 * Math.PI * (1 - 1 / n) - 1e-8)
+            .step(2 * Math.PI / n)
+    return p.map { Point(r * Math.cos(it), r * Math.sin(it)) }
 }
