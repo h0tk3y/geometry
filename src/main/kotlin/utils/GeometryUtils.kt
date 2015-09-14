@@ -4,6 +4,8 @@ import segmentsIntersection.IntersectionProvider
 import java.util.*
 
 /**
+ * Geometry primitives and util functions.
+ *
  * Created by igushs on 8/30/2015.
  */
 
@@ -81,7 +83,6 @@ public fun intersectionPoint(a: Segment, b: Segment): Point? {
     val x: Double
     val y: Double
 
-
     if (dax == 0.0) {
         x = a.x0
         y = b.y0 + dby * (x - b.x0) / dbx
@@ -96,13 +97,16 @@ public fun intersectionPoint(a: Segment, b: Segment): Point? {
         x = a.x0 + dax * (y - a.y0) / day
     } else {
         /** x = ax0 + t * dax = bx0 + u * dbx
-         *
          *  y = ay0 + t * day = by0 + u * dby
          *
          *  t = (bx0 - ax0 + u * dbx) / dax = (by0 - ay0 + u * dby) / day;
          *
          *  (d0x + u * dbx) / dax = (dy0 + u * dby) / day; */
         val u = (d0y / day - d0x / dax) / (dbx / dax - dby / day)
+
+        if (u !in 0.0..1.0)
+            return null
+
         x = b.x0 + u * dbx
         y = b.y0 + u * dby
     }

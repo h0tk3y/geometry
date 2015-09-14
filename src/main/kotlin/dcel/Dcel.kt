@@ -20,12 +20,16 @@ public open class Vertex(val point: Point) {
 
     fun inHalfEdges() = outHalfEdges().map { it.twin }
 
+    fun faces() = outHalfEdges() map { it.face }
+
     fun neighbours() = inHalfEdges().map { it.from }
 
     fun isSimple() = outHalfEdges().count() == 2
 
+    fun edgeOfFace(f: Face) = outHalfEdges().firstOrNull { it.face == f }
+
     fun isConvexFor(f: Face): Boolean {
-        return outHalfEdges().firstOrNull { it.face == f }?.let {
+        return edgeOfFace(f)?.let {
             turn(it.from.point, it.to.point, it.prev.from.point) != TURN.RIGHT
         } ?: false
     }
@@ -59,25 +63,13 @@ public class Dcel {
     var outerFace: Face by lateInit()
     val innerFaces = ArrayList<Face>()
 
-    private fun HalfEdge.bindNext(e: HalfEdge) {
-        this.next = e
-        e.prev = this
-    }
-
-    private fun bindTwins(e: HalfEdge, g: HalfEdge) {
-        e.twin = g
-        g.twin = e
-    }
-
     fun removeSimpleVertex(v: Vertex) {
         assert(v.isSimple())
         val created = ArrayList<HalfEdge>(2)
         for (e in v.outHalfEdges()) {
             val h = HalfEdge(e.prev.from)
-            h.next = e.next
-            e.next.prev = h
-            h.prev = e.prev.prev
-            e.prev.prev.next = h
+            h.next bindNext e.next
+            e.prev.prev bindNext  h
             h.face = e.face
 
             created add h
@@ -85,35 +77,109 @@ public class Dcel {
         bindTwins(created[0], created[1])
     }
 
-    fun clipEdgeStart(e: HalfEdge) {
-        assert(e.from isConvexFor e.face)
-        assert(e.prev.prev != e.next)
+    private fun Vertex.inTriangle(a: Vertex, b: Vertex, c: Vertex) =
+            turn(a.point, b.point, point).let {
+                it == turn(b.point, c.point, point) &&
+                it == turn(c.point, a.point, point)
+            }
 
-        val newEdge = HalfEdge(e.prev.from)
-        val newTwin = HalfEdge(e.to)
-        bindTwins(newEdge, newTwin)
-        newEdge.face = e.face
+    fun splitEdge(e: HalfEdge, p: Point): Vertex {
+        val newVertex = Vertex(p)
+        val edgeCont = HalfEdge(newVertex)
+        val twinCont = HalfEdge(newVertex)
+
+        edgeCont bindNext e.next
+        twinCont bindNext e.twin.next
+
+        e bindNext edgeCont
+        e.twin bindNext twinCont
+
+        edgeCont.face = e.face
+        twinCont.face = e.twin.face
+
+        return newVertex
+    }
+
+    fun clipEdgeStart(e: HalfEdge): Boolean {
+        if (!e.from.isConvexFor(e.face) ||
+            e.prev.prev == e.next ||
+            e.traverseVertices.any { it.inTriangle(e.prev.from, e.from, e.to) }
+        ) return false
+
+        splitFace(e.next, e.prev)
+        return true
+    }
+
+    fun splitFace(f: Face, v1: Vertex, v2: Vertex) {
+        val eIn = v1 edgeOfFace f
+        val eOut = v2 edgeOfFace f
+
+        if (eIn == null || eOut == null)
+            throw IllegalArgumentException("v1 and v2 should be incident to f.")
+
+        return splitFace(eIn, eOut)
+    }
+
+    /**
+     * Splits face which both [eIn] and [eOut] belong so that
+     * [eIn] will belong to the same face and [eOut] -- to a new one, that is
+     * add a new edge between starts of [eIn] and [eOut].
+     *
+     * Caller response for the consistency of the splitting.
+     *
+     * Vertices of [eIn].face should be split by [eIn].from -> [eOut].from into two semi-planes.
+     *
+     * @param eIn [HalfEdge] that will remain in the same [Face]
+     * @param eOut [HalfEdge] that will be moved into new [Face] with a chain of half-edges straight to [eIn]
+     *
+     * @sample
+     *
+     * a-----e
+     * |      \
+     * |  f   d
+     * |      /
+     * b-----c
+     *
+     * splitFace(a -> b, c -> d)
+     *
+     * a-----e
+     * |*   g \
+     * |  *   d
+     * | f  * /
+     * b-----c
+     *
+     */
+    fun splitFace(eIn: HalfEdge, eOut: HalfEdge) {
+        assert(eIn.face == eOut.face)
 
         val newFace = Face()
+        val newEdge = HalfEdge(eOut.from)
+        val newTwin = HalfEdge(eIn.from)
+        bindTwins(newEdge, newTwin)
 
-        if (e.face.edge == e)
-            e.face.edge = e.next
+        eOut.prev bindNext newEdge
+        eIn.prev bindNext newTwin
 
-        e.face = newFace
-        e.prev.face = newFace
-        newTwin.face = newFace
-        newFace.edge = e
+        newEdge bindNext eIn
+        newTwin bindNext eOut
 
-        e.prev.prev bindNext newEdge
-        newEdge bindNext e.next
-
-        newTwin bindNext e.prev
-        e bindNext newTwin
-
-        innerFaces.add(newFace)
+        eIn.face.edge = eIn
+        newEdge.face = eIn.face
+        eOut.traverse().forEach { it.face = newFace }
     }
 
     companion object {
+
+        private fun HalfEdge.bindNext(e: HalfEdge) {
+            this.next = e
+            e.prev = this
+        }
+
+        private fun bindTwins(e: HalfEdge, g: HalfEdge) {
+            e.twin = g
+            g.twin = e
+        }
+
         fun fromPolygon(polygonEdges: List<Segment>): Dcel {
             val result = Dcel()
             val outerFace = Face() after { result.outerFace = it }
@@ -125,21 +191,18 @@ public class Dcel {
             var firstEdge: HalfEdge? = null
 
             for (e in polygonEdges) {
-                val currentVertex = Vertex(e.from)
+                val newVertex = Vertex(e.from)
 
                 val edgeForward = HalfEdge(prevVertex)
-                val edgeBackward = HalfEdge(currentVertex)
+                val edgeBackward = HalfEdge(newVertex)
 
                 prevVertex.halfEdge = edgeForward
 
-                edgeForward.twin = edgeBackward
-                edgeBackward.twin = edgeForward
+                bindTwins(edgeForward, edgeBackward)
 
                 prevEdge?.let {
-                    edgeForward.prev = it
-                    it.next = edgeForward
-                    edgeBackward.next = it.twin
-                    it.twin.prev = edgeBackward
+                    it bindNext edgeForward
+                    edgeBackward bindNext it.twin
                 }
 
                 edgeForward.face = innerFace
@@ -148,16 +211,14 @@ public class Dcel {
                 if (firstEdge == null)
                     firstEdge = edgeForward
 
-                prevVertex = currentVertex
+                prevVertex = newVertex
                 prevEdge = edgeForward
             }
 
-            if (prevEdge != null) {
+            if (prevEdge != null && firstEdge != null) {
                 prevVertex.halfEdge = prevEdge
-                prevEdge.next = firstEdge!!
-                firstEdge.prev = prevEdge
-                prevEdge.twin.prev = firstEdge.twin
-                firstEdge.twin.next = prevEdge.twin
+                prevEdge bindNext firstEdge
+                firstEdge.twin bindNext prevEdge.twin
             }
 
             innerFace.edge = prevEdge!!
