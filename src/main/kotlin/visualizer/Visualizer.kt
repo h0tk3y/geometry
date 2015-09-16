@@ -1,20 +1,14 @@
 package visualizer
 
+import utils.*
 import utils.Point
-import utils.Area
-import utils.Segment
-import utils.withEach
 import java.awt.*
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
-import java.awt.event.MouseMotionListener
-import javax.swing.JPanel
-import javax.swing.SwingUtilities
-import kotlin.properties.Delegates
-import kotlin.swing.height
-import kotlin.swing.width
+import java.awt.event.*
+import javax.swing.*
 
 /**
+ * Visualizes arbitrary set of [Drawable]s with zooming and basic controls.
+ *
  * Created by igushs on 8/30/2015.
  */
 
@@ -49,8 +43,8 @@ public class Visualizer : JPanel() {
              Math.round((1 - (it.y - r.lowerLeft.y) / r.height) * height).toInt())
     }
 
-    private fun graphics() = getGraphics()?.let {
-        it.setClip(0, 0, getWidth(), getHeight());
+    private fun graphics() = graphics?.let {
+        it.setClip(0, 0, width, height);
         (it as Graphics2D).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                             RenderingHints.VALUE_ANTIALIAS_ON)
         return@let it
@@ -82,8 +76,8 @@ public class Visualizer : JPanel() {
         this.addMouseListener(object : MouseListener {
 
             override fun mousePressed(e: MouseEvent) {
-                val p = pointByScreenPoint(e.getX(), e.getY())
-                when (e.getButton()) {
+                val p = pointByScreenPoint(e.x, e.y)
+                when (e.button) {
                     MouseEvent.BUTTON1 -> {
                         if (onDragListener != null)
                             lmbPressPoint = p
@@ -96,11 +90,11 @@ public class Visualizer : JPanel() {
             }
 
             override fun mouseClicked(e: MouseEvent) {
-                when (e.getButton()) {
+                when (e.button) {
                     MouseEvent.BUTTON1 -> onClickListener
                     MouseEvent.BUTTON3 -> onRightClickListener
                     else -> null
-                }?.let { it(xByScreenX(e.getX()), yByScreenY(e.getY())) }
+                }?.let { it(xByScreenX(e.x), yByScreenY(e.y)) }
             }
 
             override fun mouseReleased(e: MouseEvent) {
@@ -108,8 +102,8 @@ public class Visualizer : JPanel() {
                     tempDrawables.clear()
                     repaint()
                 }
-                val p = pointByScreenPoint(e.getX(), e.getY())
-                when (e.getButton()) {
+                val p = pointByScreenPoint(e.x, e.y)
+                when (e.button) {
                     MouseEvent.BUTTON1 -> if (lmbPressPoint != null) {
                         if (lmbPressPoint!!.x != p.x || lmbPressPoint!!.y != p.y) when {
                             onDragListener != null ->
@@ -134,7 +128,7 @@ public class Visualizer : JPanel() {
 
         addMouseMotionListener(object : MouseMotionListener {
             override fun mouseDragged(e: MouseEvent) {
-                val p = pointByScreenPoint(e.getX(), e.getY())
+                val p = pointByScreenPoint(e.x, e.y)
 
                 if (lmbPressPoint != null) {
                     tempDrawables.clear()
@@ -156,7 +150,7 @@ public class Visualizer : JPanel() {
 
         this.
                 addMouseWheelListener {
-                    area = area.scaleCentered(1 + it.getPreciseWheelRotation() * 0.03, pointByScreenPoint(it.getX(), it.getY()))
+                    area = area.scaleCentered(1 + it.preciseWheelRotation * 0.03, pointByScreenPoint(it.x, it.y))
                 }
     }
 
@@ -166,13 +160,13 @@ public class Visualizer : JPanel() {
     fun yByScreenY(y: Int) = area.lowerLeft.y + (1 - y.toDouble() / height) * area.height
     fun pointByScreenPoint(x: Int, y: Int) = Point(xByScreenX(x), yByScreenY(y))
 
-    override synchronized fun paintComponent(g: Graphics) {
+    override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
         (g as Graphics2D).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                            RenderingHints.VALUE_ANTIALIAS_ON)
         with(g) {
             try {
-                setColor(backgroundColor)
+                color = backgroundColor
                 fillRect(0, 0, width, height)
                 (drawables + tempDrawables).withEach { draw(this@with, currentCoordinates) }
             } finally {

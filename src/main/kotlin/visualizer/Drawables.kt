@@ -1,9 +1,8 @@
 package visualizer
 
+import utils.*
 import utils.Point
-import utils.Segment
-import java.awt.Color
-import java.awt.Graphics
+import java.awt.*
 
 /**
  * Created by igushs on 9/5/2015.
@@ -22,7 +21,7 @@ public data class PointDrawable(override val x: Double, override val y: Double,
     override fun draw(graphics: Graphics, coords: Coordinates) {
         val (x, y) = coords.getDrawingCoordinates(this)
 
-        graphics.setColor(color)
+        graphics.color = color
         graphics.fillOval(x - 3, y - 3, 7, 7)
     }
 }
@@ -38,7 +37,7 @@ public class SegmentDrawable(from: Point, to: Point,
         val (x0i, y0i) = coords.getDrawingCoordinates(from)
         val (x1i, y1i) = coords.getDrawingCoordinates(to)
 
-        graphics.setColor(color)
+        graphics.color = color
         graphics.drawLine(x0i, y0i, x1i, y1i)
     }
 }

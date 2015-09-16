@@ -1,31 +1,31 @@
 package visualizer
 
-import visualizer.*
-import java.awt.Dimension
-import javax.swing.UIManager
-import javax.swing.WindowConstants
-import kotlin.swing.frame
-import kotlin.swing.minimumHeight
-import kotlin.swing.minimumWidth
+import java.awt.*
+import javax.swing.*
 
 /**
+ * Basic wrapper class that contains a [Visualizer].
+ *
  * Created by igushs on 8/30/2015.
  */
 
 class Demo() {
 
     val visualizer = Visualizer()
+    val window: JFrame
 
-    val window = frame("Demo") {
-        minimumHeight = 500
-        minimumWidth = 500
-
-        setContentPane(visualizer)
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
+    init {
+        window = JFrame("Demo")
+        with(window) {
+            this.minimumSize = Dimension(500, 500)
+            contentPane = visualizer
+            defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+            setLocationRelativeTo(null)
+        }
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     }
 
     fun start() {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         window.setVisible(true)
     }
 }

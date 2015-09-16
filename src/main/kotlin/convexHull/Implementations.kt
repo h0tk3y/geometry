@@ -4,6 +4,8 @@ import utils.*
 import java.util.*
 
 /**
+ * Implementations of point set convex hull.
+ *
  * Created by igushs on 9/6/2015.
  */
 
@@ -26,7 +28,7 @@ object JarvisConvexHull : ConvexHullProvider {
             val currentPoint = result.lastOrNull() ?: firstPoint
             val nextPoint = points
                     .filter { it != currentPoint }
-                    .maxBy(polarComparator(currentPoint))
+                    .maxBy(polarComparator(currentPoint))!!
             result add nextPoint
         } while (nextPoint !== firstPoint)
         return result
@@ -39,7 +41,7 @@ object GrahamConvexHull : ConvexHullProvider {
 
         val firstPoint = points.maxBy(compareBy<Point> { it.y }.reversed().thenBy { it.x })!!
 
-        val sortedPoints = points.filter { it != firstPoint }.sortBy(polarComparator(firstPoint))
+        val sortedPoints = points filter { it != firstPoint } sortedWith polarComparator(firstPoint)
 
         val result = arrayListOf(firstPoint, sortedPoints.first())
         fun last() = result[result.indices.end]
@@ -80,8 +82,8 @@ object AndrewConvexHull : ConvexHullProvider {
             }
         }
 
-        grahamIterate(top.sortBy(comparator.reversed()) + leftmost)
-        grahamIterate(bottom.sortBy(comparator) + rightmost)
+        grahamIterate(top.sortedWith(comparator.reversed()) + leftmost)
+        grahamIterate(bottom.sortedWith(comparator) + rightmost)
 
         return result.subList(1, result.size() - 1)
     }

@@ -3,7 +3,6 @@ package polygonTriangulation
 import dcel.*
 import utils.*
 import java.util.*
-import kotlin.properties.Delegates
 
 /**
  * Implementations for [TriangulationProvider].
@@ -12,7 +11,7 @@ import kotlin.properties.Delegates
  */
 
 
-object EarClippingTriangulation : TriangulationProvider() {
+object EarClippingTriangulation : TriangulationProvider {
 
     override fun polygonTriangulation(edges: List<Segment>): List<Segment> {
         val d = Dcel fromPolygon edges

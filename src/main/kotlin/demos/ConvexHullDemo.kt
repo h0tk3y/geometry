@@ -1,14 +1,11 @@
 package demos
 
-import convexHull.ConvexHullProvider
-import convexHull.GrahamConvexHull
-import visualizer.*
+import convexHull.*
 import utils.*
+import visualizer.*
 import java.util.*
-import javax.swing.SwingUtilities
-import kotlin.concurrent.thread
-import kotlin.concurrent.timer
-import kotlin.platform.platformStatic
+import javax.swing.*
+import kotlin.concurrent.*
 
 /**
  * Demonstrates convex hull on a set of points with pseudo Brownian motion.
@@ -20,7 +17,8 @@ object ConvexHullDemo {
     public val demo: Demo = Demo()
     val v = demo.visualizer
 
-    public platformStatic fun main(args: Array<String>) {
+    @JvmStatic
+    public fun main(args: Array<String>) {
         demo.start()
 
         val convexHaulProvider = ConvexHullProvider.DEFAULT

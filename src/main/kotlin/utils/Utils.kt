@@ -1,8 +1,7 @@
 package utils
 
 import java.util.*
-import kotlin.properties.Delegates
-import kotlin.util.measureTimeMillis
+import kotlin.properties.*
 
 /**
  * Utils used in the project code.
@@ -20,6 +19,7 @@ fun <T : Any> Iterable<T>.maxBy(comparator: Comparator<in T>): T? {
     return max
 }
 
+@Suppress("unused")
 fun <T : Any> Iterable<T>.minBy(comparator: Comparator<in T>): T? = maxBy(comparator.reversed())
 
 fun Double.between(a: Double, b: Double) = this in Math.min(a, b)..Math.max(a, b)
@@ -37,7 +37,7 @@ fun <T> Comparator<in T>.min(t1: T, t2: T) = when (compare(t1, t2)) {
 
 fun <T> Comparator<in T>.max(t1: T, t2: T) = reversed().min(t1, t2)
 
-fun <T> lateInit() = Delegates.notNull<T>()
+fun <T: Any> later() = Delegates.notNull<T>()
 
 fun <T> T.after(action: (T) -> Unit): T {
     action(this)

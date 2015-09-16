@@ -1,6 +1,6 @@
 package utils
 
-import segmentsIntersection.IntersectionProvider
+import segmentsIntersection.*
 import java.util.*
 
 /**
@@ -98,9 +98,7 @@ public fun intersectionPoint(a: Segment, b: Segment): Point? {
     } else {
         /** x = ax0 + t * dax = bx0 + u * dbx
          *  y = ay0 + t * day = by0 + u * dby
-         *
          *  t = (bx0 - ax0 + u * dbx) / dax = (by0 - ay0 + u * dby) / day;
-         *
          *  (d0x + u * dbx) / dax = (dy0 + u * dby) / day; */
         val u = (d0y / day - d0x / dax) / (dbx / dax - dby / day)
 
@@ -143,7 +141,7 @@ public fun polygonLines(p: List<Point>): List<Segment>? {
     /** [p] in counterclockwise direction */
     val ps = if (turn(leftmost, lPrev, lNext) == TURN.RIGHT)
         p else
-        p.reverse()
+        p.reversed()
 
     val pSet = HashSet(ps)
     val segments = ps.zip(ps.drop(1) + ps.first()).map { Segment(it.first, it.second) }

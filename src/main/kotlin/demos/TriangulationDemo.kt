@@ -1,15 +1,9 @@
 package demos
 
-import polygonTriangulation.TriangulationProvider
-import utils.Point
-import utils.Segment
-import utils.polygonLines
-import visualizer.Demo
-import visualizer.PointDrawable
-import visualizer.SegmentDrawable
+import polygonTriangulation.*
+import utils.*
+import visualizer.*
 import java.util.*
-import kotlin.concurrent.timer
-import kotlin.platform.platformStatic
 
 /**
  * Created by igushs on 9/6/2015.
@@ -20,7 +14,8 @@ object TriangulationDemo {
     val demo = Demo()
     val v = demo.visualizer
 
-    public platformStatic fun main(args: Array<String>) {
+    @JvmStatic
+    public fun main(args: Array<String>) {
         demo.start()
 
         val currentPoints = ArrayList<Point>()

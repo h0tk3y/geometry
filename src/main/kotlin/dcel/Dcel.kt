@@ -2,7 +2,6 @@ package dcel
 
 import utils.*
 import java.util.*
-import kotlin.properties.Delegates
 
 /**
  * Represents doubly connected edge list data structure.
@@ -12,7 +11,7 @@ import kotlin.properties.Delegates
 
 public open class Vertex(val point: Point) {
 
-    var halfEdge: HalfEdge by lateInit()
+    var halfEdge: HalfEdge by later()
 
     fun outHalfEdges() = sequence(halfEdge, {
         if (it.twin.next == halfEdge) null else it.twin.next
@@ -36,11 +35,11 @@ public open class Vertex(val point: Point) {
 }
 
 public open class HalfEdge(val from: Vertex) {
-    var next: HalfEdge by lateInit()
-    var prev: HalfEdge by lateInit()
-    var twin: HalfEdge by lateInit()
+    var next: HalfEdge by later()
+    var prev: HalfEdge by later()
+    var twin: HalfEdge by later()
 
-    var face: Face by lateInit()
+    var face: Face by later()
 
     val to: Vertex get() = next.from
 
@@ -52,7 +51,7 @@ public open class HalfEdge(val from: Vertex) {
 }
 
 public open class Face {
-    var edge: HalfEdge by lateInit()
+    var edge: HalfEdge by later()
     val inEdges = ArrayList<HalfEdge>()
 
     fun traverse(): Sequence<HalfEdge> = edge.traverse()
@@ -60,10 +59,10 @@ public open class Face {
 }
 
 public class Dcel {
-    var outerFace: Face by lateInit()
+    lateinit var outerFace: Face
     val innerFaces = ArrayList<Face>()
 
-    fun removeSimpleVertex(v: Vertex) {
+    fun removeSimple(v: Vertex) {
         assert(v.isSimple())
         val created = ArrayList<HalfEdge>(2)
         for (e in v.outHalfEdges()) {
@@ -83,7 +82,7 @@ public class Dcel {
                 it == turn(c.point, a.point, point)
             }
 
-    fun splitEdge(e: HalfEdge, p: Point): Vertex {
+    public fun splitEdge(e: HalfEdge, p: Point): Vertex {
         val newVertex = Vertex(p)
         val edgeCont = HalfEdge(newVertex)
         val twinCont = HalfEdge(newVertex)
@@ -117,7 +116,7 @@ public class Dcel {
         if (eIn == null || eOut == null)
             throw IllegalArgumentException("v1 and v2 should be incident to f.")
 
-        return splitFace(eIn, eOut)
+        splitFace(eIn, eOut)
     }
 
     /**

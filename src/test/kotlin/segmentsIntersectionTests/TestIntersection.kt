@@ -1,21 +1,10 @@
 package segmentsIntersectionTests
 
-import org.junit.Assert
-import org.junit.Test
-import segmentsIntersection.BentleyOttmannIntersection
-import segmentsIntersection.NaiveIntersection
-import testUtils.visualize
-import utils.Point
-import utils.Segment
-import utils.timed
-import visualizer.Demo
-import visualizer.PointDrawable
-import visualizer.SegmentDrawable
-import java.awt.Color
+import org.junit.*
+import segmentsIntersection.*
+import testUtils.*
+import utils.*
 import java.util.*
-import java.util.concurrent.CountDownLatch
-import kotlin.test.assertTrue
-import kotlin.test.fail
 
 val implementations = listOf(NaiveIntersection, BentleyOttmannIntersection)
 
@@ -65,6 +54,8 @@ public class TestIntersection {
         val testSize = 100
         val random = Random()
 
+
+
         val segments = 1..testSize map {
             Segment(random.nextDouble(), random.nextDouble(),
                     random.nextDouble(), random.nextDouble())
@@ -79,7 +70,7 @@ public class TestIntersection {
     @Test
     fun testBig() {
         val testSize = 1000
-        val random = Random()
+        val random = Random()   
 
         val segments = 1..testSize map {
             Segment(random.nextDouble(), random.nextDouble(),
