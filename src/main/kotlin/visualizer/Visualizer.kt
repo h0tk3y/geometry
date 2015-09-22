@@ -30,7 +30,7 @@ public class Visualizer : JPanel() {
     private val tempDrawables: MutableList<Drawable> = arrayListOf()
 
     public var area: Area = Area(Point(0.0, 0.0), Point(1.0, 1.0))
-        private set(n: Area) {
+        set(n: Area) {
             $area = n
             currentCoordinates = coordinatesOfArea(n)
             repaint()
@@ -175,7 +175,7 @@ public class Visualizer : JPanel() {
         }
     }
 
-    public fun remove(predicate: (Drawable) -> Boolean) {
+    public inline fun remove(predicate: (Drawable) -> Boolean) {
         drawables.removeAll(drawables.filter(predicate))
         repaint()
     }

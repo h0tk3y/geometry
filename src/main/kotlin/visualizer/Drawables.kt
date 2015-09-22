@@ -12,17 +12,19 @@ public interface Drawable {
     fun draw(graphics: Graphics, coords: Coordinates)
 }
 
-public data class PointDrawable(override val x: Double, override val y: Double,
-                                val color: Color = Color.RED)
+public open data class PointDrawable(override val x: Double, override val y: Double,
+                                     val color: Color = Color.RED)
 : Point(x, y), Drawable {
 
     constructor(p: Point) : this(p.x, p.y)
+
+    open val radius = 3
 
     override fun draw(graphics: Graphics, coords: Coordinates) {
         val (x, y) = coords.getDrawingCoordinates(this)
 
         graphics.color = color
-        graphics.fillOval(x - 3, y - 3, 7, 7)
+        graphics.fillOval(x - radius, y - radius, radius * 2 + 1, radius * 2 + 1)
     }
 }
 
