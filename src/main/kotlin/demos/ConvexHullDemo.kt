@@ -1,11 +1,15 @@
 package demos
 
-import convexHull.*
-import utils.*
-import visualizer.*
+import convexHull.ConvexHullProvider
+import utils.Point
+import utils.Segment
+import utils.distance
+import visualizer.Demo
+import visualizer.PointDrawable
+import visualizer.SegmentDrawable
 import java.util.*
-import javax.swing.*
-import kotlin.concurrent.*
+import javax.swing.SwingUtilities
+import kotlin.concurrent.timer
 
 /**
  * Demonstrates convex hull on a set of points with pseudo Brownian motion.
@@ -26,15 +30,15 @@ object ConvexHullDemo {
         fun apply() {
             v.remove { it is Segment }
             val hull = convexHaulProvider.convexHull(v.drawables.filterIsInstance<Point>())
-            if (hull.size() >= 2) {
+            if (hull.size >= 2) {
                 var prevPoint: Point = hull.first()
                 val result = arrayListOf<SegmentDrawable>()
-                for (i in hull drop 1) {
-                    result add SegmentDrawable(prevPoint, i)
+                for (i in hull.drop(1)) {
+                    result.add(SegmentDrawable(prevPoint, i))
                     prevPoint = i
                 }
-                result add SegmentDrawable(prevPoint, hull.first())
-                v add result
+                result.add(SegmentDrawable(prevPoint, hull.first()))
+                v.add(result)
             }
         }
 

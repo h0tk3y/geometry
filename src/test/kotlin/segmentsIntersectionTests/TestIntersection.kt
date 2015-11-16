@@ -1,19 +1,22 @@
 package segmentsIntersectionTests
 
-import org.junit.*
-import segmentsIntersection.*
-import testUtils.*
-import utils.*
+import org.junit.Assert
+import org.junit.Test
+import segmentsIntersection.BentleyOttmannIntersection
+import segmentsIntersection.NaiveIntersection
+import testUtils.visualize
+import utils.Segment
+import utils.timed
 import java.util.*
 
 val implementations = listOf(NaiveIntersection, BentleyOttmannIntersection)
 
 private fun testImplementations(segments: List<Segment>) {
     if (implementations.map { i ->
-        val (s, time) = timed { i.intersection(segments) }
-        println("$i: $time ms, ${s.size()} points")
-        return@map s.toSet().size()
-    }.distinct().size() != 1) {
+    val (s, time) = timed { i.intersection(segments) }
+    println("$i: $time ms, ${s.size} points")
+    return@map s.toSet().size
+}.distinct().size != 1) {
         visualize(segments)
         Assert.fail()
     }
@@ -56,11 +59,11 @@ public class TestIntersection {
 
 
 
-        val segments = 1..testSize map {
+        val segments = (1..testSize).map {
             Segment(random.nextDouble(), random.nextDouble(),
                     random.nextDouble(), random.nextDouble())
         }
-        val hrs = 1..testSize map {
+        val hrs = (1..testSize).map {
             val y = random.nextDouble()
             Segment(random.nextDouble(), y, random.nextDouble(), y)
         }
@@ -72,7 +75,7 @@ public class TestIntersection {
         val testSize = 1000
         val random = Random()   
 
-        val segments = 1..testSize map {
+        val segments = (1..testSize).map {
             Segment(random.nextDouble(), random.nextDouble(),
                     random.nextDouble(), random.nextDouble())
         }
@@ -84,7 +87,7 @@ public class TestIntersection {
         val testSize = 10000
         val random = Random()
 
-        val segments = 1..testSize map {
+        val segments = (1..testSize).map {
             val x = random.nextDouble()
             val y = random.nextDouble()
             Segment(x, y, x + random.nextDouble() * 0.05, y + random.nextDouble() * 0.05)

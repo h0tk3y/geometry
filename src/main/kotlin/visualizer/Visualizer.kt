@@ -1,10 +1,17 @@
 package visualizer
 
-import utils.*
+import utils.Area
 import utils.Point
-import java.awt.*
-import java.awt.event.*
-import javax.swing.*
+import utils.withEach
+import java.awt.Color
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.RenderingHints
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
+import java.awt.event.MouseMotionListener
+import javax.swing.JPanel
+import javax.swing.SwingUtilities
 
 /**
  * Visualizes arbitrary set of [Drawable]s with zooming and basic controls.
@@ -31,7 +38,7 @@ public class Visualizer : JPanel() {
 
     public var area: Area = Area(Point(0.0, 0.0), Point(1.0, 1.0))
         set(n: Area) {
-            $area = n
+            field = n
             currentCoordinates = coordinatesOfArea(n)
             repaint()
         }
@@ -185,7 +192,7 @@ public class Visualizer : JPanel() {
     public fun add(d: Drawable): Unit = add(listOf(d))
 
     public fun add(ds: Iterable<Drawable>) {
-        drawables addAll ds
+        drawables.addAll(ds)
         SwingUtilities.invokeLater {
             val g = graphics()
             if (g != null) {

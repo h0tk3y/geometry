@@ -19,7 +19,7 @@ public open class Vertex(val point: Point) {
 
     fun inHalfEdges() = outHalfEdges().map { it.twin }
 
-    fun faces() = outHalfEdges() map { it.face }
+    fun faces() = outHalfEdges().map { it.face }
 
     fun neighbours() = inHalfEdges().map { it.from }
 
@@ -52,7 +52,7 @@ public open class HalfEdge(val from: Vertex) {
 
 public open class Face {
     var edge: HalfEdge by later()
-    val inEdges = ArrayList<HalfEdge>()
+    val inEdges: List<HalfEdge> get() = ArrayList<HalfEdge>()
 
     fun traverse(): Sequence<HalfEdge> = edge.traverse()
     val traverseVertices: Sequence<Vertex> get() = edge.traverseVertices
@@ -67,11 +67,11 @@ public class Dcel {
         val created = ArrayList<HalfEdge>(2)
         for (e in v.outHalfEdges()) {
             val h = HalfEdge(e.prev.from)
-            h.next bindNext e.next
-            e.prev.prev bindNext  h
+            h.next.bindNext(e.next)
+            e.prev.prev.bindNext(h)
             h.face = e.face
 
-            created add h
+            created.add(h)
         }
         bindTwins(created[0], created[1])
     }
@@ -87,11 +87,11 @@ public class Dcel {
         val edgeCont = HalfEdge(newVertex)
         val twinCont = HalfEdge(newVertex)
 
-        edgeCont bindNext e.next
-        twinCont bindNext e.twin.next
+        edgeCont.bindNext(e.next)
+        twinCont.bindNext(e.twin.next)
 
-        e bindNext edgeCont
-        e.twin bindNext twinCont
+        e.bindNext(edgeCont)
+        e.twin.bindNext(twinCont)
 
         edgeCont.face = e.face
         twinCont.face = e.twin.face
@@ -110,8 +110,8 @@ public class Dcel {
     }
 
     fun splitFace(f: Face, v1: Vertex, v2: Vertex) {
-        val eIn = v1 edgeOfFace f
-        val eOut = v2 edgeOfFace f
+        val eIn = v1.edgeOfFace(f)
+        val eOut = v2.edgeOfFace(f)
 
         if (eIn == null || eOut == null)
             throw IllegalArgumentException("v1 and v2 should be incident to f.")
@@ -152,15 +152,20 @@ public class Dcel {
         assert(eIn.face == eOut.face)
 
         val newFace = Face()
+        innerFaces.add(newFace)
+        newFace.edge = eOut
+
         val newEdge = HalfEdge(eOut.from)
         val newTwin = HalfEdge(eIn.from)
+        newTwin.face = newFace
+
         bindTwins(newEdge, newTwin)
 
-        eOut.prev bindNext newEdge
-        eIn.prev bindNext newTwin
+        eOut.prev.bindNext(newEdge)
+        eIn.prev.bindNext(newTwin)
 
-        newEdge bindNext eIn
-        newTwin bindNext eOut
+        newEdge.bindNext(eIn)
+        newTwin.bindNext(eOut)
 
         eIn.face.edge = eIn
         newEdge.face = eIn.face
@@ -181,8 +186,8 @@ public class Dcel {
 
         fun fromPolygon(polygonEdges: List<Segment>): Dcel {
             val result = Dcel()
-            val outerFace = Face() after { result.outerFace = it }
-            val innerFace = Face() after { result.innerFaces add it }
+            val outerFace = Face().after { result.outerFace = it }
+            val innerFace = Face().after { result.innerFaces.add(it) }
 
             var prevVertex = Vertex(polygonEdges.last().from)
             var prevEdge: HalfEdge? = null
@@ -200,8 +205,8 @@ public class Dcel {
                 bindTwins(edgeForward, edgeBackward)
 
                 prevEdge?.let {
-                    it bindNext edgeForward
-                    edgeBackward bindNext it.twin
+                    it.bindNext(edgeForward)
+                    edgeBackward.bindNext(it.twin)
                 }
 
                 edgeForward.face = innerFace
@@ -216,8 +221,8 @@ public class Dcel {
 
             if (prevEdge != null && firstEdge != null) {
                 prevVertex.halfEdge = prevEdge
-                prevEdge bindNext firstEdge
-                firstEdge.twin bindNext prevEdge.twin
+                prevEdge.bindNext(firstEdge)
+                firstEdge.twin.bindNext(prevEdge.twin)
             }
 
             innerFace.edge = prevEdge!!

@@ -12,15 +12,15 @@ object NaiveIntersection : IntersectionProvider {
     override fun intersection(segments: List<Segment>): List<Point> {
         val result = ArrayList<Point>()
         for ((i, p) in segments.withIndex())
-            for (q in segments drop i + 1)
-                intersectionPoint(p, q)?.let { result add it }
+            for (q in segments.drop(i + 1))
+                intersectionPoint(p, q)?.let { result.add(it) }
         return result
     }
 }
 
 object BentleyOttmannIntersection : IntersectionProvider {
 
-    val lexComparator = compareBy<Point> { it.y } thenBy { it.x }
+    val lexComparator = compareBy<Point> { it.y }.thenBy { it.x }
 
     private class Event {
         val start: HashSet<Segment> = HashSet()
@@ -29,7 +29,7 @@ object BentleyOttmannIntersection : IntersectionProvider {
     }
 
     override fun intersection(segments: List<Segment>): List<Point> {
-        if (segments.size() < 2)
+        if (segments.size < 2)
             return listOf()
 
         /**
@@ -40,10 +40,10 @@ object BentleyOttmannIntersection : IntersectionProvider {
         val events = TreeMap<Point, Event>(lexComparator)
         for (s in segments) {
             val start = lexComparator.min(s.from, s.to)
-            events.getOrPut(start) { Event() }.start add s
+            events.getOrPut(start) { Event() }.start.add(s)
 
             val end = lexComparator.max(s.from, s.to)
-            events.getOrPut(end) { Event() }.end add s
+            events.getOrPut(end) { Event() }.end.add(s)
         }
 
         /**
@@ -88,8 +88,8 @@ object BentleyOttmannIntersection : IntersectionProvider {
                     val i = intersectionPoint(m1, m2)
                     if (i != null && lexComparator.compare(i, p) > 0) {
                         val event = events.getOrPut(i) { Event() }
-                        event.intersect add s1
-                        event.intersect add s2
+                        event.intersect.add(s1)
+                        event.intersect.add(s2)
                         return i
                     }
                 }
@@ -97,21 +97,21 @@ object BentleyOttmannIntersection : IntersectionProvider {
             }
 
             /** Point p belongs to more than one segment. */
-            if (e.intersect.isNotEmpty() || e.start.size() + e.end.size() > 1)
-                result add p
+            if (e.intersect.isNotEmpty() || e.start.size + e.end.size > 1)
+                result.add(p)
 
             if (e.end.isNotEmpty()) {
                 val left = status.headSet(e.end.first()).lastOrNull { it !in e.end }
                 val right = status.tailSet(e.end.first()).firstOrNull { it !in e.end }
                 checkIntersection(left, right)
             }
-            status removeAll e.end
-            status removeAll e.intersect
+            status.removeAll(e.end)
+            status.removeAll(e.intersect)
 
             sweepY = p.y
             sweepX = p.x
 
-            val nextEvent = events.keySet().firstOrNull()
+            val nextEvent = events.keys.firstOrNull()
 
             /** Next sweep line position. Will be used below to insert toAdd into status in the correct order. */
             var nextPoint = nextEvent ?: Point(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY)
@@ -128,7 +128,7 @@ object BentleyOttmannIntersection : IntersectionProvider {
 
             sweepY = (p.y + nextPoint.y) / 2
             sweepX = (p.x + nextPoint.x) / 2
-            status addAll toAdd
+            status.addAll(toAdd)
         }
 
         return result

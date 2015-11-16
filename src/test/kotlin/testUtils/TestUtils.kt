@@ -35,11 +35,11 @@ fun visualize(items: List<*>) {
         }
     }.filterIsInstance<Drawable>()
 
-    v add vItems
+    v.add(vItems)
 
     val latchFinished = CountDownLatch(1)
 
-    v onRightClick { x, y ->
+    v.onRightClick { x, y ->
         d.window.dispose()
         latchFinished.countDown()
     }
@@ -73,8 +73,5 @@ fun visualize(items: List<*>) {
     latchFinished.await()
 }
 
-fun circle(r: Double, n: Int): List<Point> {
-    val p = (0.0..2 * Math.PI * (1 - 1 / n) - 1e-8)
-            .step(2 * Math.PI / n)
-    return p.map { Point(r * Math.cos(it), r * Math.sin(it)) }
-}
+fun circle(r: Double, n: Int): List<Point> =
+        (0..n - 1).map { 2 * Math.PI / n * it }.map { Point(r * Math.cos(it), r * Math.sin(it)) }

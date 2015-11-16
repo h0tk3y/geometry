@@ -1,13 +1,16 @@
 package convexHullTests
 
-import convexHull.*
-import org.junit.*
+import convexHull.AndrewConvexHull
+import convexHull.GrahamConvexHull
+import convexHull.JarvisConvexHull
+import convexHull.QuickHull
+import org.junit.Assert
+import org.junit.Test
 import testUtils.circle
 import testUtils.visualize
-import utils.*
+import utils.Point
+import utils.timed
 import java.util.*
-import kotlin.test.assertTrue
-import kotlin.util.measureTimeMillis
 
 public class TestConvexHull {
     val implementations = listOf(JarvisConvexHull, GrahamConvexHull, AndrewConvexHull, QuickHull)
@@ -15,9 +18,9 @@ public class TestConvexHull {
     private fun testImplementations(points: List<Point>) {
         if (implementations.map { i ->
             val (s, time) = timed { i.convexHull(points) }
-            println("$i: $time ms, ${s.size()} points")
+            println("$i: $time ms, ${s.size} points")
             return@map s.toSet()
-        }.distinct().size() != 1) {
+        }.distinct().size != 1) {
             visualize(points)
             Assert.fail()
         }

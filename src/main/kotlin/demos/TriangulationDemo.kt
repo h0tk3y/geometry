@@ -24,9 +24,9 @@ object TriangulationDemo {
             if (currentPoints.isEmpty())
                 v.clear()
             val p = Point(x, y)
-            currentPoints.lastOrNull()?.let { v add SegmentDrawable(it, p) }
-            currentPoints add p
-            v add PointDrawable(p)
+            currentPoints.lastOrNull()?.let { v.add(SegmentDrawable(it, p)) }
+            currentPoints.add(p)
+            v.add(PointDrawable(p))
         }
 
         v.onRightClick { x, y ->
@@ -35,9 +35,9 @@ object TriangulationDemo {
             if (polygonLines != null) {
                 remove { it is Segment }
                 val triangulation = TriangulationProvider.DEFAULT.polygonTriangulation(polygonLines)
-                v add currentPoints.map { PointDrawable(it) }
-                polygonLines.let { v add it.map { SegmentDrawable(it) } }
-                triangulation.let { v add it.map { SegmentDrawable(it) } }
+                v.add(currentPoints.map { PointDrawable(it) })
+                polygonLines.let { v.add(it.map { SegmentDrawable(it) }) }
+                triangulation.let { v.add(it.map { SegmentDrawable(it) }) }
             }
             currentPoints.clear()
         }

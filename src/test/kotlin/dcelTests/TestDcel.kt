@@ -1,10 +1,11 @@
 package dcelTests
 
-import dcel.*
-import org.junit.*
-import org.junit.Assert.*
-import testUtils.*
-import utils.*
+import dcel.Dcel
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import testUtils.circle
+import utils.polygonLines
 
 /**
  * Tests for [Dcel].
@@ -42,7 +43,7 @@ class TestDcel {
         val e0 = f0.edge.traverse().first()
         d.clipEdgeStart(e0)
 
-        assertEquals(2, d.innerFaces.size())
+        assertEquals(2, d.innerFaces.size)
         assertEquals(edges - 1, f0.traverse().count())
 
         assertEquals(3, d.innerFaces.first { it != f0 }.traverse().count())

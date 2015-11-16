@@ -1,6 +1,6 @@
 package utils
 
-import segmentsIntersection.*
+import segmentsIntersection.IntersectionProvider
 import java.util.*
 
 /**
@@ -130,13 +130,13 @@ public fun distanceToLine(p: Point, l: Segment): Double {
 }
 
 public fun polygonLines(p: List<Point>): List<Segment>? {
-    if (p.distinct().size() != p.size() || p.size() < 3)
+    if (p.distinct().size != p.size || p.size < 3)
         return null
 
     val leftmost = p.minBy { it.x }!!
     val lIndex = p.indexOf(leftmost)
-    val lNext = p[(lIndex + 1) % p.size()]
-    val lPrev = p[(lIndex - 1 + p.size()) % p.size()]
+    val lNext = p[(lIndex + 1) % p.size]
+    val lPrev = p[(lIndex - 1 + p.size) % p.size]
 
     /** [p] in counterclockwise direction */
     val ps = if (turn(leftmost, lPrev, lNext) == TURN.RIGHT)

@@ -1,8 +1,9 @@
 package visualizer
 
-import utils.*
 import utils.Point
-import java.awt.*
+import utils.Segment
+import java.awt.Color
+import java.awt.Graphics
 
 /**
  * Created by igushs on 9/5/2015.
@@ -12,8 +13,8 @@ public interface Drawable {
     fun draw(graphics: Graphics, coords: Coordinates)
 }
 
-public open data class PointDrawable(override val x: Double, override val y: Double,
-                                     val color: Color = Color.RED)
+public open class PointDrawable(override val x: Double, override val y: Double,
+                                val color: Color = Color.RED)
 : Point(x, y), Drawable {
 
     constructor(p: Point) : this(p.x, p.y)

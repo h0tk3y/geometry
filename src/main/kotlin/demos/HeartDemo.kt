@@ -1,18 +1,22 @@
 package demos
 
-import utils.*
+import utils.Area
 import utils.Point
-import visualizer.*
-import java.awt.*
+import utils.distance
+import visualizer.Demo
+import visualizer.PointDrawable
+import java.awt.Color
 import java.util.*
-import kotlin.concurrent.*
+import kotlin.concurrent.timer
 
 object HeartDemo {
     val d = Demo()
     val v = d.visualizer
 
     private class Particle(override var x: Double, override var y: Double,
-                           override val radius: Int = 1 + random.nextInt(4)) : PointDrawable(x, y, Color(200 + random.nextInt(56), 0, 0)) {
+                           override val radius: Int = 1 + random.nextInt(4))
+    : PointDrawable(x, y, Color(200 + random.nextInt(56), 0, 0)) {
+
         var vx: Double = 0.0
         var vy: Double = 0.0
 
@@ -33,22 +37,14 @@ object HeartDemo {
         }
     }
 
-    fun Double.pow(d: Double) = when (d) {
+    infix fun Double.pow(d: Double) = when (d) {
         2.0 -> this * this
         3.0 -> this * this * this
         else -> Math.pow(this, d)
     }
 
     class Curve(val fx: (Double) -> Double, val fy: (Double) -> Double) {
-        fun point(t: Double = random.nextDouble()) = Particle(fx(t), fy(t))
-
-        fun pointNoise(t: Double = random.nextDouble(), noise: Double): Particle {
-            val x = heartX(t)
-            val y = heartY(t)
-            val nx = random.nextDouble() * noise - noise / 2
-            val ny = random.nextDouble() * noise - noise / 2
-            return Particle(x + nx, y + ny)
-        }
+        private fun point(t: Double = random.nextDouble()) = Particle(fx(t), fy(t))
     }
 
     private fun heartY(t: Double) = 13 * Math.cos(t) - 5 * Math.cos(2 * t) -
@@ -74,13 +70,12 @@ object HeartDemo {
 
         data class PointRadian(val p: Particle, var t: Double, val speed: Double)
 
-        val particles = ArrayList((0..1000) map {
+        val particles = ArrayList((0..1000).map {
             val t = random.nextRadian()
             PointRadian(v.area.randPoint(), t, random.nextDouble() + 0.5)
         })
 
-
-        v add particles.map { it.p }
+        v.add(particles.map { it.p })
         timer(period = 1) {
             for (i in particles.indices) {
                 val (p, t, s) = particles[i]
@@ -106,23 +101,23 @@ object HeartDemo {
         }
         d.start()
 
-        v onClick { x, y ->
+        v.onClick { x, y ->
             val z = Point(x, y)
             for (i in particles.indices) {
-                val (p, t, s) = particles[i]
+                val (p, _0, _1) = particles[i]
                 val d = 5 / distance(p, z) pow 2.0
                 p.vx += 2 * (p.x - x) * d
                 p.vy += 2 * (p.y - y) * d
             }
         }
 
-        v onRightClick { x, y ->
+        v.onRightClick { x, y ->
             val newPs = (0..10).map {
                 PointRadian(Particle(x + random.nextDouble() * 0.5, y + random.nextDouble() * 0.5, 1 + random.nextInt(3)),
-                            random.nextRadian(), random.nextDouble() + 0.5)
+                        random.nextRadian(), random.nextDouble() + 0.5)
             }
-            v add newPs.map { it.p }
-            particles addAll newPs
+            v.add(newPs.map { it.p })
+            particles.addAll(newPs)
         }
     }
 }

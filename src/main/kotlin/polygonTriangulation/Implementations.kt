@@ -1,7 +1,7 @@
 package polygonTriangulation
 
-import dcel.*
-import utils.*
+import dcel.Dcel
+import utils.Segment
 import java.util.*
 
 /**
@@ -14,14 +14,14 @@ import java.util.*
 object EarClippingTriangulation : TriangulationProvider {
 
     override fun polygonTriangulation(edges: List<Segment>): List<Segment> {
-        val d = Dcel fromPolygon edges
+        val d = Dcel.fromPolygon(edges)
         val result = ArrayList<Segment>()
 
         var e = d.innerFaces.single().edge
 
         while (e.next.next.next != e) {
             var nextE = e.next
-            if (d clipEdgeStart e) {
+            if (d.clipEdgeStart(e)) {
                 val newNext = e.next
                 result.add(newNext.segment())
             }
