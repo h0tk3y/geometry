@@ -1,5 +1,5 @@
 group 'ru,ifmo.ctddev.igushkin.cg'
-version '0.0.1-SNAPSHOT'
+version '0.0.2-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.0.0-beta-4589'
