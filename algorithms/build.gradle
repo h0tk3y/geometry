@@ -2,3 +2,5 @@ dependencies {
     compile project(':geometry')
     testCompile project(':visualizer')
 }
+
+archivesBaseName = 'algorithms'
