@@ -46,21 +46,21 @@ How to use:
 ```kotlin
 v as Visualizer
 
-v add PointDrawable(0.5, 0.5)
-v add PointDrawable(0.1, 0.3, Color.GREEN)
-v add SegmentDrawable(0.1, 0.3, 0.5, 0.5)
+v.add(PointDrawable(0.5, 0.5))
+v.add(PointDrawable(0.1, 0.3, Color.GREEN))
+v.add(SegmentDrawable(0.1, 0.3, 0.5, 0.5))
 
 v.area = Area(0.1, 0.1, 0.9, 0.9)
 
-v add (0..100).map { SegmentDrawable(0.0, it * 0.01, 1.0, it * 0.01 }
-v remove { it is PointDrawable }
+v.add((0..100).map { SegmentDrawable(0.0, it * 0.01, 1.0, it * 0.01 })
+v.remove({ it is PointDrawable })
 
-v onClick { x, y ->
+v.onClick { x, y ->
     println("Clicked at $x, $y.")
     v add PointDrawable(x, y, someRandomColor())
 }
 
-v onDrag { x0, y0, x1, y1 ->
+v.onDrag { x0, y0, x1, y1 ->
     val p0 = Point(x0, y0)
     val p1 = Point(x1, y1)
     if (distance(p0, p1) >= 0.3) {
