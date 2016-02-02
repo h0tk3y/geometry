@@ -1,14 +1,11 @@
 dependencies {
-    compile (project(':geometry')) {
-        transitive = true
-    }
-    compile (project(':algorithms')) {
-        transitive = true
-    }
-    compile (project(':visualizer')) {
-        transitive = true
-    }
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile project(':geometry')
+    runtime project(':geometry')
+    compile project(':algorithms')
+    runtime project(':algorithms')
+    compile project(':visualizer')
+    runtime project(':visualizer')
+    runtime "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 jar.archiveName = 'demos.jar'
 jar.baseName = 'demos'

@@ -1,7 +1,6 @@
 dependencies {
-    compile (project(':geometry')) {
-        transitive = true
-    }
+    compile project(':geometry')
+    runtime project(':geometry')
 }
 jar.baseName = 'visualizer'
 jar.archiveName = 'visualizer.jar'
