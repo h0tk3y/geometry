@@ -29,22 +29,24 @@ apply plugin: 'maven-publish'
 publishing {
     publications {
         publishDemos(MavenPublication) {
+            artifactId 'geometry'
             from project(':geometry').components.java
             groupId 'ru.ifmo.ctddev.igushkin.cg'
-            artifactId 'geometry'
             setVersion(globalVersion)
         }
         publishAlgorithms(MavenPublication) {
+            artifactId 'algorithms'
             from project(':algorithms').components.java
             groupId 'ru.ifmo.ctddev.igushkin.cg'
-            artifactId 'algorithms'
             setVersion(globalVersion)
+
         }
         publishVisualizer(MavenPublication) {
+            artifactId 'visualizer'
             from project(':visualizer').components.java
             groupId 'ru.ifmo.ctddev.igushkin.cg'
-            artifactId 'visualizer'
             setVersion(globalVersion)
+
         }
     }
 }

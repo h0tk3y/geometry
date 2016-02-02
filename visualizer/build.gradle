@@ -1,4 +1,3 @@
 dependencies {
     compile project(':geometry')
 }
-jar.archiveName = 'visualizer.jar'
