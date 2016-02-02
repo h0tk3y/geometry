@@ -32,19 +32,18 @@ publishing {
         publishDemos(MavenPublication) {
             artifactId 'geometry'
             from project(':geometry').components.java
-            groupId 'ru.ifmo.ctddev.igushkin.cg'
+            groupId 'com.github.h0tk3y.geometry'
         }
         publishAlgorithms(MavenPublication) {
             artifactId 'algorithms'
             from project(':algorithms').components.java
-            groupId 'ru.ifmo.ctddev.igushkin.cg'
+            groupId 'com.github.h0tk3y.geometry'
 
         }
         publishVisualizer(MavenPublication) {
             artifactId 'visualizer'
             from project(':visualizer').components.java
-            groupId 'ru.ifmo.ctddev.igushkin.cg'
-
+            groupId 'com.github.h0tk3y.geometry'
         }
     }
 }
