@@ -2,5 +2,3 @@ dependencies {
     runtime "org.jetbrains.kotlin:kotlin-stdlib:1.0.0-beta-4589"
 }
 jar.archiveName = 'geometry.jar'
-jar.baseName = 'geometry'
-archivesBaseName = 'geometry'

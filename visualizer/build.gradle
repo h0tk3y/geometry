@@ -1,6 +1,4 @@
 dependencies {
     compile project(':geometry')
 }
-jar.baseName = 'visualizer'
 jar.archiveName = 'visualizer.jar'
-archivesBaseName = 'visualizer'
