@@ -1,7 +1,10 @@
 dependencies {
-    compile project(':geometry')
+    compile (project(':geometry')) {
+        transitive = true
+    }
     testCompile project(':visualizer')
 }
 jar.archiveName = 'algorithms.jar'
+jar.extension = 'algorithms'
 jar.baseName = 'algorithms'
 archivesBaseName = 'algorithms'

@@ -1,9 +1,16 @@
 dependencies {
-    compile project(':geometry')
-    compile project(':algorithms')
-    compile project(':visualizer')
+    compile (project(':geometry')) {
+        transitive = true
+    }
+    compile (project(':algorithms')) {
+        transitive = true
+    }
+    compile (project(':visualizer')) {
+        transitive = true
+    }
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 jar.archiveName = 'demos.jar'
 jar.baseName = 'demos'
 archivesBaseName = 'demos'
+jar.extension = 'demos'

@@ -3,4 +3,5 @@ dependencies {
 }
 jar.archiveName = 'geometry.jar'
 jar.baseName = 'geometry'
+jar.extension = 'geometry'
 archivesBaseName = 'geometry'

@@ -1,6 +1,6 @@
 group 'ru,ifmo.ctddev.igushkin.cg'
-def v = '0.0.2-SNAPSHOT'
-version v
+def globalVersion = '0.0.3-SNAPSHOT'
+version globalVersion
 
 buildscript {
     ext.kotlin_version = '1.0.0-beta-4589'
@@ -26,25 +26,33 @@ allprojects {
 }
 
 apply plugin: 'maven-publish'
-
 publishing {
     publications {
+//        publishEverything(MavenPublication) {
+//            groupId 'ru.ifmo.ctddev.igushkin.cg'
+//            artifactId 'geometry'
+//            version globalVersion
+//            artifact project(':geometry').tasks.getByName('jar')
+//            artifact project(':algorithms').tasks.getByName('jar')
+//            artifact project(':visualizer').tasks.getByName('jar')
+//        }
+
         publishDemos(MavenPublication) {
             groupId 'ru.ifmo.ctddev.igushkin.cg'
             artifactId 'geometry'
-            version v
+            version globalVersion
             artifact project(':geometry').tasks.getByName('jar')
         }
         publishAlgorithms(MavenPublication) {
             groupId 'ru.ifmo.ctddev.igushkin.cg'
             artifactId 'algorithms'
-            version v
+            version globalVersion
             artifact project(':algorithms').tasks.getByName('jar')
         }
         publishVisualizer(MavenPublication) {
             groupId 'ru.ifmo.ctddev.igushkin.cg'
             artifactId 'visualizer'
-            version v
+            version globalVersion
             artifact project(':visualizer').tasks.getByName('jar')
         }
     }
