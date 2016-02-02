@@ -5,4 +5,3 @@ dependencies {
 jar.baseName = 'visualizer'
 jar.archiveName = 'visualizer.jar'
 archivesBaseName = 'visualizer'
-jar.extension = 'visualizer'
