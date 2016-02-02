@@ -3,4 +3,5 @@ dependencies {
     testCompile project(':visualizer')
 }
 jar.archiveName = 'algorithms.jar'
+jar.baseName = 'algorithms'
 archivesBaseName = 'algorithms'
