@@ -4,5 +4,5 @@ dependencies {
     compile project(':visualizer')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
-
+jar.archiveName = 'demos.jar'
 archivesBaseName = 'demos'

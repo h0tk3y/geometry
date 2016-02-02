@@ -2,5 +2,5 @@ dependencies {
     compile project(':geometry')
     testCompile project(':visualizer')
 }
-
+jar.archiveName = 'algorithms.jar'
 archivesBaseName = 'algorithms'
