@@ -28,35 +28,23 @@ allprojects {
 apply plugin: 'maven-publish'
 publishing {
     publications {
-//        publishEverything(MavenPublication) {
-//            groupId 'ru.ifmo.ctddev.igushkin.cg'
-//            artifactId 'geometry'
-//            version globalVersion
-//            artifact project(':geometry').tasks.getByName('jar')
-//            artifact project(':algorithms').tasks.getByName('jar')
-//            artifact project(':visualizer').tasks.getByName('jar')
-//        }
-
         publishDemos(MavenPublication) {
             from project(':geometry').components.java
             groupId 'ru.ifmo.ctddev.igushkin.cg'
             artifactId 'geometry'
-            version globalVersion
-//            artifact project(':geometry').tasks.getByName('jar')
+            setVersion(globalVersion)
         }
         publishAlgorithms(MavenPublication) {
             from project(':algorithms').components.java
             groupId 'ru.ifmo.ctddev.igushkin.cg'
             artifactId 'algorithms'
-            version globalVersion
-//            artifact project(':algorithms').tasks.getByName('jar')
+            setVersion(globalVersion)
         }
         publishVisualizer(MavenPublication) {
             from project(':visualizer').components.java
             groupId 'ru.ifmo.ctddev.igushkin.cg'
             artifactId 'visualizer'
-            version globalVersion
-//            artifact project(':visualizer').tasks.getByName('jar')
+            setVersion(globalVersion)
         }
     }
 }

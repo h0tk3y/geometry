@@ -1,6 +1,5 @@
 dependencies {
     compile project(':geometry')
-    runtime project(':geometry')
     testCompile project(':visualizer')
 }
 jar.archiveName = 'algorithms.jar'
