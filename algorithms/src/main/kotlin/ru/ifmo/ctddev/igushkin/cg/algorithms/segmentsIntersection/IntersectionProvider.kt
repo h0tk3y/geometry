@@ -9,10 +9,10 @@ import ru.ifmo.ctddev.igushkin.cg.geometry.Segment
  * Created by igushs on 9/6/2015.
  */
 
-public interface IntersectionProvider {
+interface IntersectionProvider {
     fun intersection(segments: List<Segment>): List<Point>
 
-    public companion object {
-        public val DEFAULT: IntersectionProvider = BentleyOttmannIntersection
+    companion object {
+        val DEFAULT: IntersectionProvider = BentleyOttmannIntersection
     }
 }

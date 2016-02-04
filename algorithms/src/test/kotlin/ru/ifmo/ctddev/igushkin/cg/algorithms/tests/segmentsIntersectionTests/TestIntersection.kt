@@ -22,7 +22,7 @@ private fun testImplementations(segments: List<Segment>) {
     }
 }
 
-public class TestIntersection {
+class TestIntersection {
 
     @Test
     fun test3Segments() {

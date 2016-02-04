@@ -2,6 +2,8 @@ package ru.ifmo.ctddev.igushkin.cg.algorithms.convexHull
 
 import ru.ifmo.ctddev.igushkin.cg.geometry.*
 import java.util.*
+import kotlin.comparisons.compareBy
+import kotlin.comparisons.thenBy
 
 /**
  * Implementations of point set convex hull.
@@ -15,7 +17,7 @@ import java.util.*
  * @param pole [Point] to which all the others are in the same semi-plane.
  */
 fun polarComparator(pole: Point): Comparator<in Point> =
-        comparator { o1, o2 -> -1 * turn(pole, o1, o2) }
+        Comparator { o1, o2 -> -1 * turn(pole, o1, o2) }
 
 object JarvisConvexHull : ConvexHullProvider {
     override fun convexHull(points: List<Point>): List<Point> {
@@ -101,7 +103,7 @@ object QuickHull : ConvexHullProvider {
             val above = points.filter { turn(line.from, line.to, it) == TURN.LEFT }
             if (above.size == 0)
                 return
-            val farthest = above.maxBy(compareBy<Point>({ distanceToLine(it, line) }).thenBy { it.x })!!
+            val farthest = above.maxWith(compareBy<Point>({ distanceToLine(it, line) }).thenBy { it.x })!!
             recurse(Segment(line.from, farthest), above)
             result.add(farthest)
             recurse(Segment(farthest, line.to), above)

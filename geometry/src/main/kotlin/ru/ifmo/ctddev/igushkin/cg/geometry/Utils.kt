@@ -11,16 +11,8 @@ import kotlin.properties.Delegates
 
 inline fun <T> Iterable<T>.withEach(action: T.() -> Unit) = forEach(action)
 
-fun <T : Any> Iterable<T>.maxBy(comparator: Comparator<in T>): T? {
-    var max = firstOrNull()
-    for (t in drop(1))
-        if (comparator.compare(t, max) >= 0)
-            max = t
-    return max
-}
-
 @Suppress("unused")
-fun <T : Any> Iterable<T>.minBy(comparator: Comparator<in T>): T? = maxBy(comparator.reversed())
+fun <T : Any> Iterable<T>.minBy(comparator: Comparator<in T>): T? = maxWith(comparator.reversed())
 
 fun Double.between(a: Double, b: Double) = this in Math.min(a, b)..Math.max(a, b)
 

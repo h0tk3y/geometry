@@ -19,8 +19,7 @@ import javax.swing.SwingUtilities
  * Created by igushs on 8/30/2015.
  */
 
-@FunctionalInterface
-public interface Coordinates {
+@FunctionalInterface interface Coordinates {
     fun getDrawingCoordinates(p: Point): Pair<Int, Int>
 
     companion object {
@@ -30,13 +29,13 @@ public interface Coordinates {
     }
 }
 
-public class Visualizer : JPanel() {
+class Visualizer : JPanel() {
     val backgroundColor = Color(30, 30, 30)
 
-    public val drawables: MutableList<Drawable> = arrayListOf()
+    val drawables: MutableList<Drawable> = arrayListOf()
     private val tempDrawables: MutableList<Drawable> = arrayListOf()
 
-    public var area: Area = Area(Point(0.0, 0.0), Point(1.0, 1.0))
+    var area: Area = Area(Point(0.0, 0.0), Point(1.0, 1.0))
         set(n: Area) {
             field = n
             currentCoordinates = coordinatesOfArea(n)
@@ -60,17 +59,17 @@ public class Visualizer : JPanel() {
     //region listeners
 
     private var onClickListener: (Visualizer.(x: Double, y: Double) -> Unit)? = null
-    public fun onClick(action: Visualizer.(x: Double, y: Double) -> Unit) {
+    fun onClick(action: Visualizer.(x: Double, y: Double) -> Unit) {
         onClickListener = action
     }
 
     private var onDragListener: (Visualizer.(x0: Double, y0: Double, x1: Double, y1: Double) -> Unit)? = null
-    public fun onDrag(action: Visualizer.(x0: Double, y0: Double, x1: Double, y1: Double) -> Unit) {
+    fun onDrag(action: Visualizer.(x0: Double, y0: Double, x1: Double, y1: Double) -> Unit) {
         onDragListener = action
     }
 
     private var onRightClickListener: (Visualizer.(x: Double, y: Double) -> Unit)? = null
-    public fun onRightClick(action: Visualizer.(x: Double, y: Double) -> Unit) {
+    fun onRightClick(action: Visualizer.(x: Double, y: Double) -> Unit) {
         onRightClickListener = action
     }
 
@@ -179,16 +178,16 @@ public class Visualizer : JPanel() {
         }
     }
 
-    public inline fun remove(predicate: (Drawable) -> Boolean) {
+    inline fun remove(predicate: (Drawable) -> Boolean) {
         drawables.removeAll(drawables.filter(predicate))
         repaint()
     }
 
-    public fun clear(): Unit = remove { true }
+    fun clear(): Unit = remove { true }
 
-    public fun add(d: Drawable): Unit = add(listOf(d))
+    fun add(d: Drawable): Unit = add(listOf(d))
 
-    public fun add(ds: Iterable<Drawable>) {
+    fun add(ds: Iterable<Drawable>) {
         drawables.addAll(ds)
         SwingUtilities.invokeLater {
             val g = graphics()

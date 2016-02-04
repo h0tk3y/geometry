@@ -28,6 +28,6 @@ class Demo() {
     }
 
     fun start() {
-        window.setVisible(true)
+        window.isVisible = true
     }
 }

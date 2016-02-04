@@ -6,10 +6,10 @@ import ru.ifmo.ctddev.igushkin.cg.geometry.Point
  * Created by igushs on 8/31/2015.
  */
 
-public interface ConvexHullProvider {
+interface ConvexHullProvider {
     fun convexHull(points: List<Point>): List<Point>
 
-    public companion object {
-        public val DEFAULT: ConvexHullProvider = QuickHull
+    companion object {
+        val DEFAULT: ConvexHullProvider = QuickHull
     }
 }

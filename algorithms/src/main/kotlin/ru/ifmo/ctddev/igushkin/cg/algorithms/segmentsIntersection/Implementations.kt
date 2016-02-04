@@ -2,6 +2,8 @@ package ru.ifmo.ctddev.igushkin.cg.algorithms.segmentsIntersection
 
 import ru.ifmo.ctddev.igushkin.cg.geometry.*
 import java.util.*
+import kotlin.comparisons.compareBy
+import kotlin.comparisons.thenBy
 
 /**
  * Implementations of line intersection,

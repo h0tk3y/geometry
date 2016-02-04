@@ -19,7 +19,7 @@ import javax.swing.WindowConstants
 
 fun visualize(items: List<*>) {
     val d = Demo()
-    d.window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE)
+    d.window.defaultCloseOperation = WindowConstants.DISPOSE_ON_CLOSE
     val v = d.visualizer
     d.start()
 

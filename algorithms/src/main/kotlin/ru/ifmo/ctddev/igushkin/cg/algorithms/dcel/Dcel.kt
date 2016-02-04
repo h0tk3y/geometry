@@ -9,11 +9,11 @@ import java.util.*
  * Created by igushs on 9/11/2015.
  */
 
-public open class Vertex(val point: Point) {
+open class Vertex(val point: Point) {
 
     var halfEdge: HalfEdge by later()
 
-    fun outHalfEdges() = sequence(halfEdge, {
+    fun outHalfEdges() = generateSequence(halfEdge, {
         if (it.twin.next == halfEdge) null else it.twin.next
     })
 
@@ -34,7 +34,7 @@ public open class Vertex(val point: Point) {
     }
 }
 
-public open class HalfEdge(val from: Vertex) {
+open class HalfEdge(val from: Vertex) {
     lateinit var next: HalfEdge
     lateinit var prev: HalfEdge
     lateinit var twin: HalfEdge
@@ -43,22 +43,22 @@ public open class HalfEdge(val from: Vertex) {
 
     val to: Vertex get() = next.from
 
-    fun traverse(): Sequence<HalfEdge> = sequence(this) { if (it.next == this) null else it.next }
+    fun traverse(): Sequence<HalfEdge> = generateSequence(this) { if (it.next == this) null else it.next }
 
     fun segment() = Segment(from.point, to.point)
 
     val traverseVertices = traverse().map { it.from }
 }
 
-public open class Face {
+open class Face {
     var edge: HalfEdge by later()
-    val inEdges: List<HalfEdge> get() = ArrayList<HalfEdge>()
+    val inEdges: List<HalfEdge> get() = ArrayList()
 
     fun traverse(): Sequence<HalfEdge> = edge.traverse()
     val traverseVertices: Sequence<Vertex> get() = edge.traverseVertices
 }
 
-public class Dcel {
+class Dcel {
     lateinit var outerFace: Face
     val innerFaces = ArrayList<Face>()
 
@@ -82,7 +82,7 @@ public class Dcel {
                 it == turn(c.point, a.point, point)
             }
 
-    public fun splitEdge(e: HalfEdge, p: Point): Vertex {
+    fun splitEdge(e: HalfEdge, p: Point): Vertex {
         val newVertex = Vertex(p)
         val edgeCont = HalfEdge(newVertex)
         val twinCont = HalfEdge(newVertex)

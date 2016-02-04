@@ -7,7 +7,7 @@ import ru.ifmo.ctddev.igushkin.cg.geometry.TURN
 import ru.ifmo.ctddev.igushkin.cg.geometry.turn
 import java.util.*
 
-public fun polygonLines(p: List<Point>): List<Segment>? {
+fun polygonLines(p: List<Point>): List<Segment>? {
     if (p.distinct().size != p.size || p.size < 3)
         return null
 

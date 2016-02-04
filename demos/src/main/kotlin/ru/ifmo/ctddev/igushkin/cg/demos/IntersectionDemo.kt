@@ -12,11 +12,10 @@ import ru.ifmo.ctddev.igushkin.cg.visualizer.SegmentDrawable
  */
 
 object IntersectionDemo {
-    public val demo: Demo = Demo()
+    val demo: Demo = Demo()
     val v = demo.visualizer
 
-    @JvmStatic
-    public fun main(args: Array<String>) {
+    @JvmStatic fun main(args: Array<String>) {
         demo.start()
 
         v.onDrag { x0, y0, x1, y1 ->

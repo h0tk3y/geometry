@@ -14,11 +14,10 @@ import java.awt.Color
 
 object LeftTurnDemo {
 
-    public val demo: Demo = Demo()
+    val demo: Demo = Demo()
     val v = demo.visualizer
 
-    @JvmStatic
-    public fun main(args: Array<String>) {
+    @JvmStatic fun main(args: Array<String>) {
         demo.start()
 
         val currentPoints = arrayListOf<Point>()

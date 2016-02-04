@@ -12,7 +12,7 @@ import ru.ifmo.ctddev.igushkin.cg.geometry.Point
 import ru.ifmo.ctddev.igushkin.cg.geometry.timed
 import java.util.*
 
-public class TestConvexHull {
+class TestConvexHull {
     val implementations = listOf(JarvisConvexHull, GrahamConvexHull, AndrewConvexHull, QuickHull)
 
     private fun testImplementations(points: List<Point>) {

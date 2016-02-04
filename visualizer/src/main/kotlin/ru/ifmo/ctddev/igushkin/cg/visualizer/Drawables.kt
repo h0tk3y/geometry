@@ -10,11 +10,11 @@ import java.awt.Graphics
  * Created by igushs on 9/5/2015.
  */
 
-public interface Drawable {
+interface Drawable {
     fun draw(graphics: Graphics, coords: Coordinates)
 }
 
-public open class PointDrawable(override val x: Double, override val y: Double,
+open class PointDrawable(override val x: Double, override val y: Double,
                                 val color: Color = Color.RED)
 : Point(x, y), Drawable {
 
@@ -30,7 +30,7 @@ public open class PointDrawable(override val x: Double, override val y: Double,
     }
 }
 
-public class SegmentDrawable(from: Point, to: Point,
+class SegmentDrawable(from: Point, to: Point,
                              val color: Color = Color.WHITE)
 : Segment(from, to), Drawable {
 
@@ -46,7 +46,7 @@ public class SegmentDrawable(from: Point, to: Point,
     }
 }
 
-public class TextDrawable(val p: Point,
+class TextDrawable(val p: Point,
                           val text: String,
                           val color: Color,
                           val size: Int) : Drawable {
