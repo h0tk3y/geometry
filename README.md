@@ -17,7 +17,14 @@ repositories {
 }
 
 dependencies {
-    compile 'com.github.User:Repo:Tag'
+    // choose the modules you need:
+    compile 'com.github.h0tk3y.geometry:geometry:v0.1'
+    compile 'com.github.h0tk3y.geometry:algorithms:v0.1'
+    compile 'com.github.h0tk3y.geometry:visualizer:v0.1'
+    compile 'com.github.h0tk3y.geometry:demos:v0.1'
+    
+    // or, to add all the above:
+    compile 'com.github.h0tk3y:geometry:v0.1'
 }
 ```
 
