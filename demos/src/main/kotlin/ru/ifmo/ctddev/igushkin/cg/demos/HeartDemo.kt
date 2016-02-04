@@ -59,8 +59,8 @@ object HeartDemo {
 
     fun Random.nextRadian(): Double = nextDouble() * 2 * Math.PI
 
-    fun Area.randPoint() = Particle(lowerLeft.x + (upperRight.x - lowerLeft.x) * random.nextDouble(),
-                                    lowerLeft.y + (upperRight.y - lowerLeft.y) * random.nextDouble())
+    private fun Area.randPoint() = Particle(lowerLeft.x + (upperRight.x - lowerLeft.x) * random.nextDouble(),
+                                            lowerLeft.y + (upperRight.y - lowerLeft.y) * random.nextDouble())
 
 
     @JvmStatic
