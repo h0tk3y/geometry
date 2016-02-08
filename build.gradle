@@ -24,6 +24,11 @@ subprojects {
     repositories {
         mavenCentral()
     }
+
+    artifacts {
+        archives sourcesJar
+    }
+
     dependencies {
         testCompile group: 'junit', name: 'junit', version: '4.11'
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
