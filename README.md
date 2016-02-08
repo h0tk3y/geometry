@@ -1,8 +1,32 @@
 Geometry
 ===
+[![](https://jitpack.io/v/h0tk3y/geometry.svg)](https://jitpack.io/#h0tk3y/geometry)
+
 ![Polygon triangulation](https://dl.dropboxusercontent.com/s/rkyjjkfdit00rd9/Capture_K_tr.JPG)
 
 Playing around with Kotlin and computational geometry algorithms.
+
+How to add
+---
+
+Use this Gradle dependency or Maven equivalent:
+```	   
+repositories {
+    ...
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    // choose the modules you need:
+    compile 'com.github.h0tk3y.geometry:geometry:v0.1'
+    compile 'com.github.h0tk3y.geometry:algorithms:v0.1'
+    compile 'com.github.h0tk3y.geometry:visualizer:v0.1'
+    compile 'com.github.h0tk3y.geometry:demos:v0.1'
+    
+    // or, to add all the above:
+    compile 'com.github.h0tk3y:geometry:v0.1'
+}
+```
 
 Algorithms implemented at the moment
 ---
@@ -57,7 +81,7 @@ v.remove({ it is PointDrawable })
 
 v.onClick { x, y ->
     println("Clicked at $x, $y.")
-    v add PointDrawable(x, y, someRandomColor())
+    v.add(PointDrawable(x, y, someRandomColor()))
 }
 
 v.onDrag { x0, y0, x1, y1 ->
@@ -65,7 +89,7 @@ v.onDrag { x0, y0, x1, y1 ->
     val p1 = Point(x1, y1)
     if (distance(p0, p1) >= 0.3) {
         println("Dragged so long! From $x0, $y0 to $x1, $y1.")
-        v add SegmentDrawable(p0, p1)
+        v.add(SegmentDrawable(p0, p1))
     }
 }
 ```
