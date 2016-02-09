@@ -42,6 +42,8 @@ Algorithms implemented at the moment
 * Segments intersection
   * Bentley-Ottmann algorithm
 
+* Minkowski addition for convex shapes
+
 Geometry primitives like _left turn_ predicate and distance are also there.
 
 Visualizer
