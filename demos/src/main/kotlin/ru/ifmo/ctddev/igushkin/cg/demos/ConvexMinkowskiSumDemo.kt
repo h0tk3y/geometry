@@ -52,7 +52,10 @@ object ConvexMinkowskiSumDemo {
                     points.zip(points.drop(1) + points[0]).map { SegmentDrawable(it.first, it.second, color) }
 
             if (currentState != State.RESULT) {
-                val hull = ConvexHullProvider.DEFAULT.convexHull(stateToList[currentState]!!)
+                val list = stateToList[currentState]!!
+                if (list.size == 0)
+                    return@onRightClick
+                val hull = ConvexHullProvider.DEFAULT.convexHull(list)
                 v.add(joinWithSegments(hull, stateToColor[currentState]!!))
             }
 
@@ -63,9 +66,10 @@ object ConvexMinkowskiSumDemo {
             }
 
             if (currentState == State.RESULT) {
+                val color = stateToColor[currentState]!!
                 val addition = ConvexMinkowskiAdditionProvider.DEFAULT.addition(stateToList[State.FIRST]!!,
                                                                                 stateToList[State.SECOND]!!)
-                v.add(joinWithSegments(addition, stateToColor[currentState]!!))
+                v.add(addition.map { PointDrawable(it.x, it.y, color) } + joinWithSegments(addition, color))
                 first.clear()
                 second.clear()
             }
