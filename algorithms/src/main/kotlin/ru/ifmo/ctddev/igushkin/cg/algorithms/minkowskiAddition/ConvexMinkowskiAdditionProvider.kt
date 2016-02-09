@@ -12,6 +12,6 @@ interface ConvexMinkowskiAdditionProvider {
     fun addition(shape1: List<Point>, shape2: List<Point>): List<Point>
 
     companion object {
-        val DEFAULT = NaiveConvexMinkowskiAddition
+        val DEFAULT = EdgeConvexMinkowskiAddition
     }
 }
