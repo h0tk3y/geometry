@@ -30,7 +30,10 @@ import javax.swing.SwingUtilities
 }
 
 class Visualizer : JPanel() {
-    val backgroundColor = Color(30, 30, 30)
+    var backgroundColor = Color(30, 30, 30)
+        set(value) {
+            field = value; repaint()
+        }
 
     val drawables: MutableList<Drawable> = arrayListOf()
     private val tempDrawables: MutableList<Drawable> = arrayListOf()
